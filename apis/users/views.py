@@ -146,100 +146,82 @@ class UserRegistrationVerify_retry_View(APIView):
 
         else:
             return api_error({'token': 'Token is requered!'}, status=400, message="Validation error!")
-     
-
-
-
-# """
-#     Seller Registration
-#     @Rakib
-# """
-# class SellerRegistrationView(APIView):
-#     def post(self, request, format=None):
-#         user_serializer = SellerRegistrationSerializer(data=request.data)
-
-#         if user_serializer.is_valid():
-#             user_serializer.save()
-#             msg = "We have received your property information. Our team will contact you shortly."
-#             return api_success(user_serializer.data, status=201, message = msg)
-
-#         return api_error({'errors': user_serializer.errors}, status=422, message="Validation error!")
     
 
 
 
-# """
-#     User Login with Email or Phone Number
-#     @Rakib
-# """
-# class UserLoginView(APIView):
-#     serializer_class = UserLoginSerializer
+"""
+    User Login with Email or Phone Number
+    @Rakib
+"""
+class UserLoginView(APIView):
+    serializer_class = UserLoginSerializer
 
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(data=request.data)
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
 
-#         if serializer.is_valid():
-#             email_or_phone = serializer.data.get('email_or_phone')
-#             get_user = User.objects.filter(Q(email=email_or_phone) | Q(phone=email_or_phone)).first()
+        if serializer.is_valid():
+            email_or_phone = serializer.data.get('email_or_phone')
+            get_user = User.objects.filter(Q(email=email_or_phone) | Q(phone=email_or_phone)).first()
 
-#             if get_user is not None:
-#                 if get_user.is_verified == True:
-#                     login(request, get_user)       
-#                     token = create_JWT_token(get_user)   ## Token Genaret
-#                     msg = {
-#                         'token': token,
-#                         'message':'Login Success',
-#                         'user_id':get_user.id,
-#                         }
-#                     return api_success(serializer.data, status=201, message = msg)
+            if get_user is not None:
+                if get_user.is_verified == True:
+                    login(request, get_user)       
+                    token = create_JWT_token(get_user)   ## Token Genaret
+                    msg = {
+                        'token': token,
+                        'message':'Login Success',
+                        'user_id':get_user.id,
+                        }
+                    return api_success(serializer.data, status=201, message = msg)
                 
-#                 else:
-#                     # Delete previous otp if have
-#                     if UserOTP.objects.filter(user = get_user).first():
-#                         UserOTP.objects.filter(user = get_user).delete()
+                else:
+                    # Delete previous otp if have
+                    if UserOTP.objects.filter(user = get_user).first():
+                        UserOTP.objects.filter(user = get_user).delete()
 
-#                     new_otp = UserOTP.objects.create(user = get_user)  ## Create new otp
+                    new_otp = UserOTP.objects.create(user = get_user)  ## Create new otp
 
-#                     # html_content = render_to_string('mail/otp_mail.html', {
-#                     #     'user': get_user,
-#                     #     'code': new_otp.otp
-#                     # })
+                    # html_content = render_to_string('mail/otp_mail.html', {
+                    #     'user': get_user,
+                    #     'code': new_otp.otp
+                    # })
 
-#                     # html_mail_sender(
-#                     #     'Please verify your Account',  ## subject
-#                     #     html_content,                  ## html_content
-#                     #     [get_user.email],                  ## to
-#                     # )
+                    # html_mail_sender(
+                    #     'Please verify your Account',  ## subject
+                    #     html_content,                  ## html_content
+                    #     [get_user.email],                  ## to
+                    # )
                     
-#                     # ## Phone varification
-#                     # body = f"""
-#                     #             Welcome to Address PMS
-#                     #             Hi, {get_user.name}, 
-#                     #             Thank you for registering with us. Please use the following code to verify your account.
-#                     #             Your verification OTP is {new_otp.otp}
+                    # ## Phone varification
+                    # body = f"""
+                    #             Welcome to Address PMS
+                    #             Hi, {get_user.name}, 
+                    #             Thank you for registering with us. Please use the following code to verify your account.
+                    #             Your verification OTP is {new_otp.otp}
 
-#                     #             Regards,
-#                     #             Address PMS Team
-#                     #     """
-#                     # sms_sender (
-#                     #     get_user.phone,
-#                     #     body,
-#                     # )
+                    #             Regards,
+                    #             Address PMS Team
+                    #     """
+                    # sms_sender (
+                    #     get_user.phone,
+                    #     body,
+                    # )
 
-#                     print("--------------------------------")
-#                     print(f"User Name : {get_user.name}, User Otp : {new_otp.otp}")
-#                     print("--------------------------------")
+                    print("--------------------------------")
+                    print(f"User Name : {get_user.name}, User Otp : {new_otp.otp}")
+                    print("--------------------------------")
 
-#                     msg = {
-#                         'token': new_otp.token, 
-#                         'message': 'Please verify your account. Verification OTP send on your email or phone number.'
-#                     }
-#                     return api_error({'errors': serializer.errors}, status=422, message=msg)
-#             else:
-#                 return api_error({'errors': serializer.errors}, status=422, message="Validation error!")
+                    msg = {
+                        'token': new_otp.token, 
+                        'message': 'Please verify your account. Verification OTP send on your email or phone number.'
+                    }
+                    return api_error({'errors': serializer.errors}, status=422, message=msg)
+            else:
+                return api_error({'errors': serializer.errors}, status=422, message="Validation error!")
                 
-#         else:
-#             return api_error({'errors': serializer.errors}, status=422, message="Validation error!")
+        else:
+            return api_error({'errors': serializer.errors}, status=422, message="Validation error!")
 
 
 
