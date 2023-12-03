@@ -1,0 +1,50 @@
+{% load shared %}
+{{ form.non_field_errors }}
+
+{% for field in form %}
+    {#    <div class="fieldWrapper">#}
+    {#        {{ field.errors }}#}
+    {#        {{ field.label_tag }} {{ field }}#}
+    {#    </div>#}
+
+    {#    <div class="form-group row mb-2">#}
+    {#        <label for="{{ field.id_for_label }}" class="form-label col-xxl-2 col-form-label">{{ field.label }}</label>#}
+    {#        <div class="col-xxl-10">#}
+    {#            {{ field }}#}
+    {#        </div>#}
+    {#        {% if field.help_text %}#}
+    {#            <small id="{{ field.id_for_label }}" class="form-text text-muted">{{ field.help_text }}</small>#}
+    {#        {% endif %}#}
+    {#        {% for error in field.errors %}#}
+    {#            <small id="{{ field.id_for_label }}" class="form-text text-danger">{{ error }}</small>#}
+    {#        {% endfor %}#}
+    {#    </div>#}
+
+    <div class="form-group row mb-4">
+        <label for="{{ field.id_for_label }}" class="col-md-3 col-form-label">{{ field.label }}</label>
+        <div class="col-md-9">
+            {% if field.field.widget.input_type == 'file' %}
+{#                {% if field.value %}#}
+{#                    <img src="{{ field.value.url }}"#}
+{#                         alt="{{ field.value.name }}"#}
+{#                         class="img-thumbnail"#}
+{#                         style="max-width: 5rem; width: 100%; height: auto;"#}
+{#                    />#}
+{##}
+{#                    {{ field.clear }}#}
+{##}
+{##}
+{#                {% endif %}#}
+                                {{ field }}
+            {% else %}
+                {{ field }}
+            {% endif %}
+        </div>
+        {% if field.help_text %}
+            <small id="{{ field.id_for_label }}" class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+        {% for error in field.errors %}
+            <small id="{{ field.id_for_label }}" class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+{% endfor %}

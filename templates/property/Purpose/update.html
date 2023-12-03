@@ -1,0 +1,60 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+
+{% block title %}
+Address PMS | Update Property Purpose
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row flex-between-end">
+            <div class="col-auto align-self-center">
+                <h5 class="mb-0" data-anchor="data-anchor">Update Property Purpose</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <div class="tab-content">
+            
+            <form class="row g-3 needs-validation" novalidate="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="validationCustom01">Purpose Title</label>
+                        {{ form.purpose_title }}
+                    </div>
+                </div>
+                <div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="customFile">
+                            Parent
+                            <span class="fs--2 ms-1 text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Who's sub-purpose, do you want to make? Select the parent purpose. If you make parent purpose, do't select this.">
+                                <span class="fas fa-question-circle"></span>
+                            </span>
+                            <span>If you make sub-purpose then select this.</span>
+                        </label>
+                        {{ form.parent }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Update</button>
+                    <a class="btn btn-danger ml-3" href="{% url 'property:property-purpose' %}" >Cancel</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+</script>
+
+
+{% endblock content %}

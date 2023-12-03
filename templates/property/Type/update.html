@@ -1,0 +1,48 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+
+{% block title %}
+Address PMS | Update Property Type
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row flex-between-end">
+            <div class="col-auto align-self-center">
+                <h5 class="mb-0" data-anchor="data-anchor">Update Property Type</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <div class="tab-content">
+            
+            <form class="row g-3 needs-validation" novalidate="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="validationCustom01">Type Name</label>
+                        {{ form.type }}
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Update</button>
+                    <a class="btn btn-danger ml-3" href="{% url 'property:property-type' %}" >Cancel</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+</script>
+
+
+{% endblock content %}

@@ -1,0 +1,191 @@
+{% extends 'layouts/master.html' %}
+
+
+{% block title %}
+Address PMS | Property Featuers
+{% endblock title %}
+
+
+
+
+{% block styles %}
+
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+<style>
+    .action li {
+        display: inline;
+    }
+
+    .action li a {
+        color: #fff;
+        display: inline-block;
+        font-size: 14px;
+        margin-right: 5px;
+        line-height: 1.5;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+    }
+
+    .action li a i {
+        padding: 3px 5px;
+        border-radius: 3px;
+    }
+
+    .fa-pencil {
+        background: #37a000;
+    }
+
+        {
+        font-family: 'Josefin Sans', sans-serif !important;
+    }
+
+    .dataTables_wrapper {
+        display: grid;
+        grid-template-rows: repeat(2, auto);
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .dataTables_length {
+        width: fit-content;
+        grid-row: 1;
+        grid-column: 1;
+    }
+
+    .dataTables_length label {
+        display: flex;
+        align-items: center;
+    }
+
+    .dataTables_length label select {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .dataTables_filter {
+        width: fit-content;
+        grid-row: 1;
+        grid-column: 2;
+        justify-self: end;
+
+    }
+
+    .dataTables_filter label {
+        display: flex;
+        align-items: center;
+    }
+
+    .dataTables_filter label input {
+        margin-left: 5px;
+    }
+
+    .table {
+        grid-row: 2;
+        grid-column: 1 / span 2;
+    }
+
+    .dataTables_info {
+        width: fit-content;
+        grid-row: 3;
+        grid-column: 1;
+    }
+
+    .dataTables_paginate {
+        width: fit-content;
+        grid-row: 3;
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .datatable-column-filter-row {
+        display: none;
+    }
+
+    .avatar {
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    table {
+        text-align: center;
+    }
+    table th {
+        font-size: 15px;
+    }
+</style>
+{% endblock styles %}
+
+
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row flex-between-center">
+            <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Propery Type</h5>
+            </div>
+            <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                <div id="orders-actions">
+                    <a href="{% url 'property:property-type-create' %}" class="btn btn-konnect-default btn-sm" type="button"><span
+                            class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span
+                            class="d-none d-sm-inline-block ms-1">New</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="card-body p-4">
+
+        <div class="table-responsive">
+
+            <table width="100%" class="table table-sm table-striped fs--1 mb-0">
+                <tr>
+                    <th>No</th>
+                    <th>Propery Type</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th>Sub Type</th>
+                    <th width="200">Actions</th>
+                </tr>
+
+                {% for property_type in property_types %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{property_type.type}}</td>
+                    <td>{{property_type.created_at|date:"d-M-Y"}}</td>
+                    <td>{{property_type.updated_at|date:"d-M-Y"}}</td>
+                    <td><a href="{% url 'property:property-subtype' property_type.id %}" class="btn btn-primary btn-sm">Sub Type</a></td>
+
+                    <td>
+                        <ul class="action d-flex">
+                            <li>
+                                <a class="btn btn-warning btn-sm"
+                                    href="{% url 'property:property-type-update' property_type.id %}">E</a>
+                            </li>
+                            <li>
+                                <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#deletefeature{{property_type.id}}">
+                                    X
+                                </a>
+                            </li>
+                            {% include 'property/Type/delete.html' %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

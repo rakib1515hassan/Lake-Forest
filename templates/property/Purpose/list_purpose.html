@@ -1,0 +1,290 @@
+{% extends 'layouts/master.html' %}
+
+
+{% block title %}
+Address PMS | Property Featuers
+{% endblock title %}
+
+
+
+
+{% block styles %}
+
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+<style>
+    .action li {
+        display: inline;
+    }
+
+    .action li a {
+        color: #fff;
+        display: inline-block;
+        font-size: 14px;
+        margin-right: 5px;
+        line-height: 1.5;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+    }
+
+    .action li a i {
+        padding: 3px 5px;
+        border-radius: 3px;
+    }
+
+    .fa-pencil {
+        background: #37a000;
+    }
+
+        {
+        font-family: 'Josefin Sans', sans-serif !important;
+    }
+
+    .dataTables_wrapper {
+        display: grid;
+        grid-template-rows: repeat(2, auto);
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .dataTables_length {
+        width: fit-content;
+        grid-row: 1;
+        grid-column: 1;
+    }
+
+    .dataTables_length label {
+        display: flex;
+        align-items: center;
+    }
+
+    .dataTables_length label select {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .dataTables_filter {
+        width: fit-content;
+        grid-row: 1;
+        grid-column: 2;
+        justify-self: end;
+
+    }
+
+    .dataTables_filter label {
+        display: flex;
+        align-items: center;
+    }
+
+    .dataTables_filter label input {
+        margin-left: 5px;
+    }
+
+    .table {
+        grid-row: 2;
+        grid-column: 1 / span 2;
+    }
+
+    .dataTables_info {
+        width: fit-content;
+        grid-row: 3;
+        grid-column: 1;
+    }
+
+    .dataTables_paginate {
+        width: fit-content;
+        grid-row: 3;
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .datatable-column-filter-row {
+        display: none;
+    }
+
+    .avatar {
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    table {
+        text-align: center;
+    }
+    table th {
+        font-size: 15px;
+    }
+</style>
+{% endblock styles %}
+
+
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row flex-between-center">
+            <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Propery Purposes</h5>
+            </div>
+            <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                <div id="orders-actions">
+                    <a href="{% url 'property:property-purpose-create' %}" class="btn btn-konnect-default btn-sm" type="button"><span
+                            class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span
+                            class="d-none d-sm-inline-block ms-1">New</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="card-body p-4">
+
+        <div class="table-responsive">
+
+            <form class="d-flex col-sm-6 col-md-4 col-lg-3 mb-3" method="get">
+                <div class="input-group">
+                    <input class="form-control" type="search" name="search" placeholder="Search..." aria-label="Search" value="{{ request.GET.search }}">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="fas fa-search"></i></button>
+                </div>
+               
+                <!-- <div class="input-group">
+                    <input class="form-control shadow-none search" type="search" name="search" placeholder="Search..." aria-label="search">
+                    <div class="input-group-text bg-transparent">
+                        <a type="submit">
+                            <svg class="svg-inline--fa fa-search fa-w-16 fs--1 text-600" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                                <path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div> -->
+            </form>
+
+            <table width="100%" class="table table-sm table-striped fs--1 mb-0">
+                <tr>
+                    <th>No</th>
+                    <th>Propery Purposes</th>
+                    <th>Propery Sub Purposes</th>
+                    <th>Parent</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th width="200">Actions</th>
+                </tr>
+
+                {% for p_purpos in page_obj %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        {% if p_purpos.parent == None %}
+                            {{p_purpos.purpose_title}}
+                        {% endif %}
+                    </td>
+                    
+                    <td>
+                        {% if p_purpos.parent != None %}
+                            {{p_purpos.purpose_title}}
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if p_purpos.parent == None %}
+                            --
+                        {% else %}
+                            {{p_purpos.parent}}
+                        {% endif %}
+                    </td>
+
+                    <td>{{p_purpos.created_at|date:"d-M-Y"}}</td>
+                    <td>{{p_purpos.updated_at|date:"d-M-Y"}}</td>
+
+                    <td>
+                        <ul class="action d-flex">
+                            <li>
+                                <a class="btn btn-warning btn-sm"
+                                    href="{% url 'property:property-purpose-update' p_purpos.id %}">E</a>
+                            </li>
+                            <li>
+                                <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#deletefeature{{p_purpos.id}}">
+                                    X
+                                </a>
+                            </li>
+                            {% include 'property/Purpose/delete.html' %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <div class="row justify-content-between">
+            <div class="col-md-6">
+                <p>Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} out of {{ products_count }}</p>
+            </div>
+            <div class="col-md-2">
+    
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<nav aria-label="Page navigation example">
+    {% if page_obj.has_other_pages %}
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">Previous</span>
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" aria-label="Previous">
+                    <span aria-hidden="true">Previous</span>
+                </a>
+            </li>
+        {% endif %}
+
+
+
+        {% for i in page_obj.paginator.page_range %} 
+            {% if page_obj.number == i %}
+                <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %} 
+        {% endfor %} 
+        
+        
+        
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">Next</span>
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" aria-label="Next">
+                    <span aria-hidden="true">Next</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</nav>
+
+
+{% endblock content %}

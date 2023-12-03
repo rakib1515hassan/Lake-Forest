@@ -1,0 +1,60 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+
+{% block title %}
+Address PMS | Update Property Features
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row flex-between-end">
+            <div class="col-auto align-self-center">
+                <h5 class="mb-0" data-anchor="data-anchor">Update Property Features</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <div class="tab-content">
+            
+            <form class="row g-3 needs-validation" novalidate="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="validationCustom01">Features Type</label>
+                        {{ form.features_type }}
+                    </div>
+                </div>
+                <div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="customFile">Features Image</label>
+                        {% if form.features_logo.value %}
+                            <img src="{{ form.features_logo.value.url }}" class="rounded mx-auto d-block mb-2" alt="Profile Picture" width="80px" height="80px" >
+                        {% else %}
+                            <p class="text-danger fw-bold" style="margin-left: 100px;">No Image</p>
+                        {% endif %}
+
+                        {{ form.features_logo }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Update</button>
+                    <a class="btn btn-danger ml-3" href="{% url 'property:property-features' %}" >Cancel</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+</script>
+
+
+{% endblock content %}

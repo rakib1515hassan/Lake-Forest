@@ -1,0 +1,149 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+
+{% block title %}
+Address PMS | Create Property Type
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row flex-between-end">
+            <div class="col-auto align-self-center">
+                <h5 class="mb-0" data-anchor="data-anchor">Create Property Type</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <div class="tab-content">
+            
+            <form class="row g-3 needs-validation">
+                {% csrf_token %}
+                <div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="p_type_title">Property Type</label>
+                        <input type="text" class="form-control" id="p_type_title" name="p_type_title" placeholder="Enter property type">
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5>Sub Type  
+                        <button class="btn btn-sm ml-5" id="add_sup_type" style="background: rgb(218, 45, 218); color: white;">Add</button>
+                    </h5>
+                    
+                    <!-- Here show the sub type input field -->
+                    <div id="show_item">
+
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-5">
+                    <button class="btn btn-primary" type="submit" id="submit_button" style="padding-left: 50px; padding-right: 50px;">Save</button>
+                </div>
+            </form>
+            
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+
+<script>
+$(document).ready(function() {
+    let counter = 0;
+
+    $("#add_sup_type").click(function(e) {
+        e.preventDefault();
+
+        counter++;
+
+        const sub_type_field = `
+        <div class="show_item">
+            <div class="row">
+                <div class="col-md-8">
+                    <label class="form-label" for="p_sub_type_title">Property Sub Type</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control mx-2" id="p_sub_type_title" name="p_sub_type_title[]" placeholder="Enter property type">
+                        <button class="btn btn-danger btn-sm ms-2 remove_btn" data-counter="${counter}">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+
+        $("#show_item").prepend(sub_type_field);
+    });
+
+    // Remove the sub type field
+    $("#show_item").on("click", ".remove_btn", function() {
+        $(this).closest(".show_item").remove();
+    });
+
+    
+
+    // After Form submition data is pass view class by Ajax request
+    $("#submit_button").click(function(e) {
+        e.preventDefault();
+
+
+        const Property_Type_Data = {
+            "property_type_title": $("#p_type_title").val(),
+        };
+
+        const Property_Sub_Type_Data = [];
+        $("input[name='p_sub_type_title[]']").each(function(index) {
+            const sub_type = $(this).val();
+
+            Property_Sub_Type_Data.push({
+                "sub_type_data": sub_type,
+            });
+        });
+
+
+
+
+        const formData = {
+            "Type_Data": Property_Type_Data,
+            "Sub_Type_Data": Property_Sub_Type_Data
+        };
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+
+        // Send data to the Django view using AJAX
+        $.ajax({
+            type: "POST",
+            url: "{% url 'property:property-type-create' %}",
+            data: JSON.stringify(formData),
+            headers: {
+                'Content-Type': 'application/json', 
+                'X-CSRFToken': csrfToken
+            },
+
+            success: function(response) {
+                // console.log("Success:", response);
+                alert('Propety Type save successfully.');
+                window.location.href = "{% url 'property:property-type' %}";
+            },
+
+
+            error: function(error) {
+                // console.error("Error:", error);
+                alert("Error is occard. Please try again !");
+            }
+        });
+        
+    });
+});
+</script>
+
+
+{% endblock content %}

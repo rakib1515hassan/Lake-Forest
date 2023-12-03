@@ -1,0 +1,205 @@
+{% extends 'layouts/master.html' %}
+
+
+{% block title %}
+Konnect | admin create
+{% endblock title %}
+
+
+{% block styles %}
+<style>
+  .error-message {
+    color: red;
+    /* Set the text color to red */
+    list-style: none;
+    /* Remove list bullets */
+    margin: 0;
+    /* Remove any default margin */
+    padding: 0;
+    /* Remove any default padding */
+    font-weight: bold;
+    font-size: 12px;
+  }
+</style>
+{% endblock styles %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mb-3">
+      <div class="card-header">
+        <div class="row flex-between-end">
+          <div class="col-auto align-self-center">
+            <h5 class="mb-0" data-anchor="data-anchor">Create Admin</h5>
+          </div>
+        </div>
+      </div>
+      <div class="card-body bg-light">
+        <div class="tab-content">
+
+          <div class="tab-pane preview-tab-pane active" role="tabpanel"
+            aria-labelledby="tab-dom-68f59ccc-3b08-4ccc-af2d-26fccf62a3ae" id="dom-68f59ccc-3b08-4ccc-af2d-26fccf62a3ae">
+            
+
+            
+              <form class="row g-3" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+      
+                <div class="col-lg-6 mb-3">
+                  <label class="form-label" for="last_name">Name</label>
+                  {{form.name}}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label" for="email">Email</label>
+                  {{form.email}}
+                  {% for error in form.email.errors %}
+                    <div class="invalid-feedback">
+                      {{ error }}
+                    </div>
+                  {% endfor %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label" for="phone">Phone</label>
+                  {{form.phone}}
+                  {% for error in form.phone.errors %}
+                    <div class="invalid-feedback">
+                      {{ error }}
+                    </div>
+                  {% endfor %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label" for="phone">User Type</label>
+                  {{form.user_type}}
+                </div>
+
+                <div class="col-md-6 mb-3"><label class="form-label">Upload Avatar</label>
+                  {{form.user_img}}
+                </div>
+                
+                <div class="col-md-6 mb-3"><label class="form-label">Upload Cover Avatar</label>
+                  {{form.user_cov_img}}
+                </div>
+                
+                <div class="border-dashed-bottom my-3"></div>
+                {% if request.user.is_superuser == True%}
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label" for="is_superuser">Is Superadmin</label>
+                    {{form.is_superuser}}
+                  </div>
+                {% endif %}
+
+                <div class="col-md-6 mb-3" id="isAdminDiv">
+                  <label class="form-label" for="is_admin">Is Admin</label>
+                  {{form.is_admin}}
+                </div>
+      
+                <div class="col-md-6 mb-3">
+                  <label class="form-label" for="is_active">Is Active</label>
+                  {{form.is_active}}
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label" for="is_verified">Is Verified</label>
+                  {{form.is_verified}}
+                </div>
+                
+                <div class="border-dashed-bottom my-3"></div>
+                <div class="col-md-6 mb-3"><label class="form-label" for="password1">Password</label>
+                  {{form.password}}
+                  {% if form.password.errors %}
+                  <ul class="errorlist">
+                    {% for error in form.password.errors %}
+                    <li class="error-message">{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </div>
+      
+                <div class="col-md-6 mb-3"><label class="form-label" for="password2">Confirm Password</label>
+                  {{form.password2}}
+                  {% if form.password2.errors %}
+                  <ul class="errorlist">
+                    {% for error in form.password2.errors %}
+                    <li class="error-message">{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </div>
+             
+
+                <div class="col-12 d-flex justify-content-start">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-save me-2"></i>
+                    Submit 
+                  </button>
+                  <a class="btn btn-secondary ms-3" href="{% url 'dashboards:admin-list' %}" >
+                    <i class="fa fa-times me-2"></i>
+                    Cancel
+                  </a>
+                </div>
+              </form>
+           
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const isSuperadminCheckbox = document.getElementById("is_superuser");
+  const isAdminDiv = document.getElementById("isAdminDiv");
+  const isAdminCheckbox = document.getElementById("is_admin");
+
+  isSuperadminCheckbox.addEventListener("change", function() {
+    if (isSuperadminCheckbox.checked) {
+      console.log("Is Super Admin Clicked.")
+      isAdminDiv.style.display = "none";
+      isAdminCheckbox.checked = true;
+    } else {
+      isAdminDiv.style.display = "block";
+    }
+  });
+
+  // Initial check to hide/show based on the initial state of Is Superadmin
+  if (isSuperadminCheckbox.checked) {
+    isAdminDiv.style.display = "none";
+    isAdminCheckbox.checked = true;
+  }
+</script>
+
+<script>
+  var fieldErrors = {{ field_errors|safe }};
+  
+  $(document).ready(function() {
+
+    if (fieldErrors.email.length > 0) {
+      $('#email').addClass('is-invalid');
+    }
+
+    if (fieldErrors.phone.length > 0) {
+      $('#phone').addClass('is-invalid');
+    }
+
+    if (fieldErrors.user_img.length > 0) {
+      $('#user_img').addClass('is-invalid');
+    }
+
+    if (fieldErrors.user_cov_img.length > 0) {
+      $('#user_cov_img').addClass('is-invalid');
+    }
+
+    if (fieldErrors.password2.length > 0) {
+      $('#password').addClass('is-invalid');
+      $('#password2').addClass('is-invalid');
+    }
+
+  });
+</script>
+{% endblock content %}

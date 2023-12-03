@@ -1,0 +1,62 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+
+{% block title %}
+Address PMS | Create Property Features
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row flex-between-end">
+            <div class="col-auto align-self-center">
+                <h5 class="mb-0" data-anchor="data-anchor">Create Property Features</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <div class="tab-content">
+            
+            <form class="row g-3 needs-validation" novalidate="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Features Type</label>
+                    {{ form.features_type }}
+                    {% if form.features_type.errors %}
+                        <div class="invalid-feedback" id="features_type_error">
+                            {{ form.features_type.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="customFile">Features Image</label>
+                        {{ form.features_logo }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    // Check if the error message exists and remove display: none;
+    var errorElement = document.getElementById('features_type_error');
+    if (errorElement) {
+        errorElement.style.display = 'block';
+    }
+</script>
+
+
+
+{% endblock content %}

@@ -1,0 +1,434 @@
+{% extends 'layouts/master.html' %}
+
+{% load static %}
+
+{% block title %}
+ homepage
+{% endblock title %}
+
+
+{% block content %}
+
+{% comment %}
+<div class="row g-3 mb-3">
+    <div class="col-md-6 col-xxl-4">
+        <div class="card h-100 bg-line-chart-gradient">
+        <div class="card-header bg-transparent light">
+            <h5 class="text-white">Users online right now</h5>
+
+            <div class="real-time-user display-1 fw-normal text-white" data-countup='{"endValue":119}' id="logged-in-users">0</div>
+
+        </div>
+        <div class="card-body text-white fs--1 light pb-0">
+            <p class="border-bottom pb-2" style="border-color: rgba(255, 255, 255, 0.15) !important">Page views / second</p>
+            <!-- Find the JS file for the following chart at: src/js/charts/echarts/real-time-users.js-->
+            <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
+            <div class="echart-real-time-users" style="height:150px" data-echart-responsive="true">
+            </div>
+            <div class="list-group-flush mt-4">
+            <div class="rounded-2" style="border:1px solid rgba(255, 255, 255, 0.15)">
+                <div class="px-3 bg-transparent text-white d-flex justify-content-between px-0 py-1 fw-semi-bold border-top-0" style="border-bottom:1px solid rgba(255, 255, 255, 0.15)">
+                <p class="mb-0">Most Active Pages</p>
+                <p class="mb-0">User Count</p>
+                </div>
+                <div class="px-3 bg-transparent text-white d-flex justify-content-between px-0 py-1" style="border-bottom:1px solid rgba(255, 255, 255, 0.05)">
+                <p class="mb-0">/bootstrap-themes/</p>
+                <p class="mb-0">3</p>
+                </div>
+                <div class="px-3 bg-transparent text-white d-flex justify-content-between px-0 py-1" style="border-bottom:1px solid rgba(255, 255, 255, 0.05)">
+                <p class="mb-0">/tags/html5/</p>
+                <p class="mb-0">3</p>
+                </div>
+                <div class="px-3 bg-transparent text-white d-xxl-flex justify-content-between px-0 py-1 d-none" style="border-bottom:1px solid rgba(255, 255, 255, 0.05)">
+                <p class="mb-0">/</p>
+                <p class="mb-0">2</p>
+                </div>
+                <div class="px-3 bg-transparent text-white d-xxl-flex justify-content-between px-0 py-1 d-none" style="border-bottom:1px solid rgba(255, 255, 255, 0.05)">
+                <p class="mb-0">/preview/falcon/dashboard/</p>
+                <p class="mb-0">2</p>
+                </div>
+                <div class="px-3 bg-transparent text-white d-flex justify-content-between px-0 py-1" style="border-bottom:1px solid rgba(255, 255, 255, 0.05)">
+                <p class="mb-0">/100-best-themes...all-time/</p>
+                <p class="mb-0">1</p>
+                </div>
+                <div class="px-3 bg-transparent text-white d-flex justify-content-between px-0 py-1" style="border-bottom:1px solid rgba(255, 255, 255, 0.05)">
+                <p class="mb-0">/product/falcon-admin-dashboard/</p>
+                <p class="mb-0">1</p>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="card-footer text-end bg-transparent light"><a class="text-white" href="#!">Real-time data<span class="fa fa-chevron-right ms-1 fs--1"></span></a></div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xxl-4">
+        <div class="card echart-session-by-browser-card h-100">
+        <div class="card-header d-flex flex-between-center bg-light py-2">
+            <h6 class="mb-0">Session By Browser</h6>
+            <div class="dropdown font-sans-serif btn-reveal-trigger">
+            <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal" type="button" id="dropdown-session-by-browser" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
+            <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-session-by-browser"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+            </div>
+            </div>
+        </div>
+        <div class="card-body d-flex flex-column justify-content-between py-0">
+            <div class="my-auto py-5 py-md-0">
+            <!-- Find the JS file for the following chart at: src/js/charts/echarts/session-by-browser.js-->
+            <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
+            <div class="echart-session-by-browser h-100" data-echart-responsive="true"></div>
+            </div>
+            <div class="border-top">
+            <table class="table table-sm mb-0">
+                <tbody>
+                <tr>
+                    <td class="py-3">
+                    <div class="d-flex align-items-center"><img src="../assets/img/icons/chrome-logo.png" alt="" width="16" />
+                        <h6 class="text-600 mb-0 ms-2">Chrome</h6>
+                    </div>
+                    </td>
+                    <td class="py-3">
+                    <div class="d-flex align-items-center"><span class="fas fa-circle fs--2 me-2 text-primary"></span>
+                        <h6 class="fw-normal text-700 mb-0">50.3%</h6>
+                    </div>
+                    </td>
+                    <td class="py-3">
+                    <div class="d-flex align-items-center justify-content-end"><span class="fas fa-caret-down text-danger"></span>
+                        <h6 class="fs--2 mb-0 ms-2 text-700">2.9%</h6>
+                    </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="py-3">
+                    <div class="d-flex align-items-center"><img src="../assets/img/icons/safari-logo.png" alt="" width="16" />
+                        <h6 class="text-600 mb-0 ms-2">Safari</h6>
+                    </div>
+                    </td>
+                    <td class="py-3">
+                    <div class="d-flex align-items-center"><span class="fas fa-circle fs--2 me-2 text-success"></span>
+                        <h6 class="fw-normal text-700 mb-0">30.1%</h6>
+                    </div>
+                    </td>
+                    <td class="py-3">
+                    <div class="d-flex align-items-center justify-content-end"><span class="fas fa-caret-up text-success"></span>
+                        <h6 class="fs--2 mb-0 ms-2 text-700">29.4%</h6>
+                    </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="py-3">
+                    <div class="d-flex align-items-center"><img src="../assets/img/icons/firefox-logo.png" alt="" width="16" />
+                        <h6 class="text-600 mb-0 ms-2">Mozilla</h6>
+                    </div>
+                    </td>
+                    <td class="py-3">
+                    <div class="d-flex align-items-center"><span class="fas fa-circle fs--2 me-2 text-info"></span>
+                        <h6 class="fw-normal text-700 mb-0">20.6%</h6>
+                    </div>
+                    </td>
+                    <td class="py-3">
+                    <div class="d-flex align-items-center justify-content-end"><span class="fas fa-caret-up text-success"></span>
+                        <h6 class="fs--2 mb-0 ms-2 text-700">220.7%</h6>
+                    </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="card-footer bg-light py-2">
+            <div class="row flex-between-center g-0">
+            <div class="col-auto">
+                <select class="form-select form-select-sm" data-target=".echart-session-by-browser">
+                <option value="week" selected="selected">Last 7 days</option>
+                <option value="month">Last month</option>
+                <option value="year">Last Year</option>
+                </select>
+            </div>
+            <div class="col-auto"><a class="btn btn-link btn-sm px-0 fw-medium" href="#!">Browser overview<span class="fas fa-chevron-right ms-1 fs--2"></span></a></div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endcomment %}
+
+
+
+<div>
+    <div class="row g-3 mb-3">
+
+        <div class="col-md-6 col-xxl-3">
+            <div class="card h-md-100 ecommerce-card-min-width">
+                <div class="card-header d-flex flex-between-center pb-0">
+                    <h3 class="mb-0">Total User</h3>
+                    <div class="dropdown font-sans-serif btn-reveal-trigger">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
+                            type="button" id="dropdown-weather-update" data-bs-toggle="dropdown"
+                            data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span
+                                class="fas fa-ellipsis-h fs--2"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2"
+                            aria-labelledby="dropdown-weather-update">
+                            <a class="dropdown-item" href="">View</a>
+                            <a class="dropdown-item" href="">Export</a>
+                            <div class="dropdown-divider"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body d-flex flex-column justify-content-end">
+                    <div class="row">
+                        <div class="col">
+                            <p class="font-sans-serif lh-1 mb-1 fs-4" id="total_customers">{{total_users}}</p>
+                            <!-- <span class="badge badge-soft-success rounded-pill fs--2">Total Active User: 545</span> -->
+                        </div>
+                        
+                        <div class="col-auto ps-0">
+                            <span class="badge badge-soft-success rounded-pill fs-1" >
+                                Online right now : <span id="logged_in_users"> {{logged_in_users}}</span>
+                            </span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xxl-3">
+            <div class="card h-md-100">
+                <div class="card-header d-flex flex-between-center pb-0">
+                    <h3 class="mb-0">Total Property</h3>
+                    <div class="dropdown font-sans-serif btn-reveal-trigger">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
+                            type="button" id="dropdown-weather-update" data-bs-toggle="dropdown"
+                            data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span
+                                class="fas fa-ellipsis-h fs--2"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2"
+                            aria-labelledby="dropdown-weather-update">
+                            <a class="dropdown-item" href="">Status</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="">
+                                <span class="badge rounded-pill bg-warning" style="width: 100px;">Pending</span>
+                            </a>
+                            <a class="dropdown-item" href="">
+                                <span class="badge rounded-pill bg-success" style="width: 100px;">Approved</span>
+                            </a>
+                            <a class="dropdown-item" href="">
+                                <span class="badge rounded-pill bg-primary" style="width: 100px;">Handovers</span>
+                            </a>
+                            <a class="dropdown-item" href="">
+                                <span class="badge rounded-pill bg-danger" style="width: 100px;">Refuse</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-2">
+                    <div class="row g-0 h-100 align-items-center">
+                        <div class="col">
+                            <div class="d-flex align-items-center"><img class="me-3"
+                                    src="assets/img/icons/weather-icon.png" alt="" height="60" />
+                                <div>
+                                    <!-- <h6 class="mb-2">Dhaka City</h6> -->
+                                    <div class="fs-1 fw-semi-bold">
+                                        <div class="text-warning">Pending :
+                                            <span id="id_property_pending"> {{property_pending}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto text-center ps-2">
+                            <div class="fs-4 fw-normal font-sans-serif text-primary mb-1 lh-1">
+                                <span id="id_total_property">{{total_property}}</span>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 col-xxl-3">
+            <div class="card h-md-100">
+                <div class="card-header pb-0">
+                    <h3 class="mb-0 mt-2">Total Customer</h3>
+                </div>
+                <div class="card-body d-flex flex-column justify-content-end">
+                    <div class="row justify-content-between">
+                        <div class="col-auto align-self-end">
+                            <div class="fs-4 fw-normal font-sans-serif text-700 lh-1 mb-1">
+                                <span id="id_customers">{{customers}}</span>
+                            </div>
+                            <span class="badge rounded-pill fs--2 bg-200 text-primary" id="total_groups">
+                                <!-- <span class="fas fa-caret-up me-1"></span>13.6%</span> -->
+                        </div>
+                        <div class="col-auto ps-0 mt-n4">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xxl-3">
+            <div class="card h-md-100">
+                <div class="card-body">
+                    <div class="row h-100 justify-content-between g-0">
+                        <div class="col-5 col-sm-6 col-xxl pe-2">
+                            <h3 class="mt-1">Total Seller</h3>
+                            <div class="fs--2 mt-3">
+                                {% for event in events %}
+                                    <div class="d-flex flex-between-center mb-1">
+                                        <div class="d-flex align-items-center"><span class="dot bg-primary"></span><span
+                                                class="fw-semi-bold" id="id_sellers">{{sellers}}</span></div>
+                                        <div class="d-xxl-none">
+                                            
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-auto position-relative">
+                            <div class="echart-market-share"></div>
+                            <div class="position-absolute top-50 start-50 translate-middle text-dark fs-2" id="id_sellers">{{sellers}}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xxl-3">
+            <div class="card">
+              <div class="card-header d-flex flex-between-center py-2 border-bottom">
+                <h6 class="mb-0">Most Popular City</h6>
+                <div class="dropdown font-sans-serif btn-reveal-trigger">
+                  <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal" type="button" id="dropdown-most-leads" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
+                  <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-most-leads"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                    <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body d-flex flex-column justify-content-between">
+                <div class="row align-items-center">
+                  <div class="col-md-5 col-xxl-12 mb-xxl-1">
+                    <div class="position-relative">
+                      <!-- Find the JS file for the following chart at: src/js/charts/echarts/most-leads.js-->
+                      <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
+                      <div class="echart-most-leads my-2" data-echart-responsive="true"></div>
+                      <div class="position-absolute top-50 start-50 translate-middle text-center">
+                        <p class="fs--1 mb-0 text-400 font-sans-serif fw-medium">Total</p>
+                        <p class="fs-3 mb-0 font-sans-serif fw-medium mt-n2">15.6k</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-xxl-12 col-md-7">
+                    <hr class="mx-ncard mb-0 d-md-none d-xxl-block" />
+                    {% for top_city in top_cities %}
+                        <div class="d-flex flex-between-center border-bottom py-3 pt-md-0 pt-xxl-3">
+                            <div class="d-flex">
+                                <!-- <img class="me-2" src="../assets/img/crm/email.svg" width="16" height="16" alt="..." /> -->
+                                <h6 class="text-700 mb-0">{{ top_city.city }} </h6>
+                            </div>
+                            <!-- <p class="fs--1 text-500 mb-0 fw-semi-bold">{{ top_city.city_count }}</p> -->
+                            <h6 class="text-700 mb-0">{{ top_city.city_count }}</h6>
+                        </div>
+                    {% endfor %}
+
+                    <!-- <div class="d-flex flex-between-center border-bottom py-3 border-bottom-0 pb-0">
+                      <div class="d-flex"><img class="me-2" src="../assets/img/crm/other.svg " width="16" height="16" alt="..." />
+                        <h6 class="text-700 mb-0">Other </h6>
+                      </div>
+                      <p class="fs--1 text-500 mb-0 fw-semi-bold">256 vs 189</p>
+                      <h6 class="text-700 mb-0">53%</h6>
+                    </div> -->
+
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-light p-0"><a class="btn btn-sm btn-link d-block py-2" href="#!">Primary<span class="fas fa-chevron-right ms-1 fs--2"></span></a></div>
+            </div>
+          </div>
+          <div class="col-md-12 col-xxl-8">
+            <div class="card h-100">
+              <div class="card-header d-flex flex-between-center border-bottom border-200 py-2">
+                <h6 class="mb-0">Property Status</h6>
+                <!-- <div class="dropdown font-sans-serif btn-reveal-trigger">
+                  <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal" type="button" id="crm-deal-forecast-bar" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
+                  <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="crm-deal-forecast-bar"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
+                    <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                  </div>
+                </div> -->
+              </div>
+              <div class="card-body d-flex align-items-center">
+                <div class="w-100">
+                  <h3 class="text-700 mb-6"></h3>
+                  <div class="progress overflow-visible rounded-3 font-sans-serif fw-medium fs--1 mt-xxl-auto" style="height: 20px;">
+                    <div class="progress-bar overflow-visible bg-progress-gradient border-end border-white border-2 rounded-end rounded-pill text-start" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><span class="text-700 mt-n6">$47.8k</span></div>
+                    <div class="progress-bar overflow-visible bg-soft-primary border-end border-white border-2 text-start" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"><span class="text-700 mt-n6">$20.2k</span></div>
+                    <div class="progress-bar overflow-visible bg-soft-info border-end border-white border-2 text-start" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"><span class="text-700 mt-n6">$18k</span></div>
+                    <div class="progress-bar overflow-visible bg-info rounded-start rounded-pill text-start" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="15" aria-valuemax="100"><span class="text-700 mt-n6">$16k</span></div>
+                  </div>
+                  <div class="row fs--1 fw-semi-bold text-500 mt-3 g-0 mt-3 mt-xxl-4">
+                    <div class="col-auto d-flex align-items-center pe-3"><span class="dot bg-primary"></span><span>Closed won</span><span class="d-none d-md-inline-block d-lg-none d-xxl-inline-block">(100%)</span></div>
+                    <div class="col-auto d-flex align-items-center pe-3"><span class="dot bg-soft-primary"></span><span>Contact sent</span><span class="d-none d-md-inline-block d-lg-none d-xxl-inline-block">(5%)</span></div>
+                    <div class="col-auto d-flex align-items-center pe-3"><span class="dot bg-soft-info"></span><span>Pending</span><span class="d-none d-md-inline-block d-lg-none d-xxl-inline-block">(5%)</span></div>
+                    <div class="col-auto d-flex align-items-center"><span class="dot bg-info"></span><span>Qualified</span><span class="d-none d-md-inline-block d-lg-none d-xxl-inline-block">(20%)</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+
+
+        
+    </div>
+</div>
+
+<div class="m-5">
+    {{ map|safe }}
+</div>
+
+{% endblock content %}
+
+
+
+{% block js %}
+<script>
+    $(document).ready(function() {
+        console.log("ready!");
+
+        function updateData() {
+            // Send request to the URL to get updated data
+            fetch('/admin/live-data/')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the displayed data
+                    console.log("Data = ", data.total_user);
+                    console.log("Data = ", data.logged_in_users);
+
+                    // Update HTML elements
+                    $('#total_customers').text(data.total_user);
+                    $('#logged_in_users').text(data.logged_in_users);
+                    $('#id_customers').text(data.customers);
+                    $('#id_sellers').text(data.sellers);
+                    $('#id_total_property').text(data.total_property);
+                    $('#id_property_pending').text(data.property_pending);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Call the function initially
+        updateData();
+
+        // Set interval to update data every 5 seconds
+        setInterval(updateData, 5000);
+    });
+</script>
+
+{% endblock js %}

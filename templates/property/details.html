@@ -1,0 +1,337 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+
+
+{% block title %}
+Address PMS | Property
+{% endblock title %}
+
+
+
+{% block content %}
+
+
+<div class="card mb-3">
+    <div class="card-header position-relative min-vh-25 mb-7">
+        <div class="bg-holder rounded-3 rounded-bottom-0" style="background-image:url({% static 'assets/img/generic/4.jpg' %});">
+        </div><!--/.bg-holder-->
+        <div class="avatar avatar-5xl avatar-profile">
+            {% if property.user.user_img %}
+                <img class="rounded-circle img-thumbnail shadow-sm" src="{{property.user.user_img.url}}" width="200" alt="" />              
+            {% else %}
+                <img class="rounded-circle img-thumbnail shadow-sm" width="200" alt=" No No image">        
+            {% endif %}
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-8">
+                <h4 class="mb-1">
+                    {{property.user.name}}
+                    {% if property.user.is_verified == True %}
+                    <span data-bs-toggle="tooltip" data-bs-placement="right" title="Verified">
+                        <small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small>
+                    </span>
+                    {% endif %}
+                </h4>
+                <p>{{property.user.email}}</p>
+                <h5 class="fs-0 fw-normal">{{ property.reference_no }}</h5>
+                <p class="text-500">
+                    {{ property.propertyaddress.location|slice:":40" }}{% if property.propertyaddress.location|length > 40 %}...{% endif %}
+                    , {{ property.propertyaddress.city }}</p>
+                <a class="btn btn-konnect-primary btn-sm px-4" type="button" 
+                   href="{% url 'users:user-details' property.user.id %}">
+                   Seller Profile
+                </a>
+                <a class="btn btn-konnect-default btn-sm px-3 ms-2" type="button" 
+                    href="{% url 'property:property-update' property.id %}">
+                    Update
+                </a>
+                <div class="border-dashed-bottom my-4 d-lg-none"></div>
+            </div>
+            <div class="col ps-2 ps-lg-3">     
+                <div class="flex-1">
+                    <h5 class="mb-0 fw-bold text-capitalize">Status : 
+                        {% if property.property_status == 'pending' %}
+                            <span class="text-warning ">{{property.property_status}}</span>
+                        {% elif property.property_status == 'approved' %}
+                            <span class="text-success">{{property.property_status}}</span>
+                        {% elif property.property_status == 'handovers' %}
+                            <span class="text-primary">{{property.property_status}}</span>
+                        {% elif property.property_status == 'refuse' %}
+                            <span class="text-danger">{{property.property_status}}</span>
+                        {% endif %}
+                    </h5>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h5 class="mb-0">Owner Information</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light border-top">
+        <div class="row">
+            <div class="col-lg col-xxl-7">
+                <!-- <h4 class="fw-semi-bold ls mb-3">Owner Information</h4> -->
+                <table class="table table-bordered table-striped">
+                    <thead class="bg-200 text-900">
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-semi-bold">Name</td>
+                            <td>{{ property.user.name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Phone Number</td>
+                            <td>{{ property.user.phone }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Email</td>
+                            <td>{{ property.user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Profile Image</td>
+                            <td>
+                                <div class="position-relative h-sm-100">
+                                    {% if property.user.user_img %}
+                                        <img class="img-fluid fit-cover rounded-1 absolute-sm-centered" 
+                                        src="{{property.user.user_img.url}}" width="80px" height="120px" alt="" />
+                                    {% else %}
+                                        <p>N/A</p>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h5 class="mb-0">Property Information</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light border-top">
+        <div class="row">
+            <div class="col-lg col-xxl-7">
+                <table class="table table-bordered table-striped">
+                    <thead class="bg-200 text-900">
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-semi-bold">Title</td>
+                            <td>{{ property.title }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Reference No</td>
+                            <td>{{ property.reference_no }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Size</td>
+                            <td>{{ property.size }} Square Feet(ft²)</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Price</td>
+                            <td>{{ property.price }}/- <span class="fw-bold fs-3"> ৳</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Bed's</td>
+                            <td>{{ property.bed }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Bath's</td>
+                            <td>{{ property.bath }}</td>
+                        </tr>
+
+                        {% if property.property_purpose.parent %}
+                            <tr>
+                                <td class="fw-semi-bold">Property Purpose</td>
+                                    <td>
+                                        {% if property.property_purpose %}
+                                            {{ property.property_purpose.parent }}
+                                        {% endif %}
+                                    </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-semi-bold">Property Sub-Purpose</td>
+                                    <td>
+                                        {% if property.property_purpose %}
+                                            {{ property.property_purpose.purpose_title }}
+                                        {% endif %}
+                                    </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td class="fw-semi-bold">Property Purpose</td>
+                                    <td>
+                                        {% if property.property_purpose %}
+                                            {{ property.property_purpose.purpose_title }}
+                                        {% endif %}
+                                    </td>
+                            </tr>
+                        {% endif %}
+
+                        <tr>
+                            <td class="fw-semi-bold">Property Type</td>
+                            <td>
+                                {% if property.property_type %}
+                                    {{ property.property_type.type }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Property Sub-Type</td>
+                            <td>
+                                {% if property.property_sub_type %}
+                                    {{ property.property_sub_type.sub_type }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="fw-semi-bold">Floor Plans</td>
+                            <td>
+                                <div class="position-relative h-sm-100">
+                                    {% if property.floor_plans %}
+                                    <a href="{{property.floor_plans.url}}" data-gallery="gallery-2">
+                                        <img class="img-fluid rounded" src="{{property.floor_plans.url}}" alt="" width="300" />
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Property Video</td>
+                            <td>
+                                <!-- <div class="player rounded-3" data-plyr-provider="youtube" data-plyr-embed-id="bTqVqk7FSmY"> -->
+                                    {% if property.video %}
+                                        <video width="400" controls>
+                                            <source src="{{ property.video.url }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    {% else %}
+                                        <p>No video available for this property.</p>
+                                    {% endif %}
+                                <!-- </div> -->
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="fw-semi-bold">Description</td>
+                            <td>{{property.description|safe}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h5 class="mb-0">Property Address</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light border-top">
+        <div class="row">
+            <div class="col-lg col-xxl-7">
+                <table class="table table-bordered table-striped">
+                    <thead class="bg-200 text-900">
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-semi-bold">City</td>
+                            <td>
+                                {% if property.propertyaddress %}
+                                    {{ property.propertyaddress.city }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Location</td>
+                            <td>
+                                {% if property.propertyaddress %}
+                                    {{ property.propertyaddress.location }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% if property.property_features %}
+<div class="card mb-3">
+    <div class="card-header bg-light">
+      <div class="row align-items-center">
+
+        <div class="col">
+          <h5 class="mb-0" id="followers">Property Feature 
+            <span class="d-none d-sm-inline-block">({{property.property_features.all.count}})</span>
+        </h5>
+        </div>
+
+      </div>
+    </div>
+    <div class="card-body bg-light px-1 py-0">
+      <div class="row g-0 text-center fs--1">
+        {% for feature in property.property_features.all %}
+            <div class="col-4 col-md-4 col-lg-3 col-xxl-2 m-3 border-radius" 
+                style="background:#F5F5F5; height: 150px; width: 180px;">
+                <div class="" >
+                    {% if feature.features_logo %}
+                        <img class="" src="{{feature.features_logo.url}}" alt="" width="100" />
+                    {% endif %}
+                    <h6 class="mb-1 text-dark">{{feature.features_type}}</h6>
+                </div>
+            </div>
+        {% endfor %}
+      </div>
+    </div>
+</div>
+{% endif %}
+
+
+{% endblock content %}

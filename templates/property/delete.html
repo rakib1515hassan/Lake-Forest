@@ -1,0 +1,26 @@
+<div class="modal fade" aria-modal="false" id="deleteProperty{{property.id}}">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cancel">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <h5 class="ms-2">Are you sure, to delete this property?</h5>
+            <div class="modal-body d-flex" style="flex-direction: column;">
+                <p>
+                    <span class="fw-bold">Reference No:</span> {{property.reference_no}}
+                </p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{% url 'property:property-delete' property.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete_user" id="user_id"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

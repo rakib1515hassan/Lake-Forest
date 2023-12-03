@@ -1,0 +1,175 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+
+
+{% block title %}
+Address PMS | user details
+{% endblock title %}
+
+
+
+{% block content %}
+
+
+<div class="card mb-3">
+    <div class="card-header position-relative min-vh-25 mb-7">
+        <div class="bg-holder rounded-3 rounded-bottom-0" style="background-image:url({% static 'assets/img/generic/4.jpg' %});">
+        </div><!--/.bg-holder-->
+        <div class="avatar avatar-5xl avatar-profile">
+            <!-- <img class="rounded-circle img-thumbnail shadow-sm" src="{% static 'assets/img/team/2.jpg' %}" width="200" alt="" />  -->
+            {% if user.user_img %}
+                <img class="rounded-circle img-thumbnail shadow-sm" src="{{user.user_img.url}}" width="200" alt="" />              
+            {% else %}
+                <img class="rounded-circle img-thumbnail shadow-sm" width="200" alt=" No No image">        
+            {% endif %}
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-8">
+                <h4 class="mb-1">
+                    {{user.name}}
+                    {% if user.is_verified == True %}
+                    <span data-bs-toggle="tooltip" data-bs-placement="right" title="Verified">
+                        <small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small>
+                    </span>
+                    {% endif %}
+                </h4>
+                <p>{{user.email}}</p>
+                <!-- <h5 class="fs-0 fw-normal">Senior Software Engineer at Technext Limited</h5>
+                <p class="text-500">New York, USA</p> -->
+                <a class="btn btn-konnect-primary btn-sm px-4" type="button" 
+                   href="{% url 'users:user-update' user.id %}">
+                   Privacy
+                </a>
+                <a class="btn btn-konnect-default btn-sm px-3 ms-2" type="button" 
+                    href="">
+                    Setting
+                </a>
+                <div class="border-dashed-bottom my-4 d-lg-none"></div>
+            </div>
+            <div class="col ps-2 ps-lg-3">
+                <!-- <a class="d-flex align-items-center mb-2" href="#"><img class="align-self-center me-2" src="{% static 'admin\img\user-details\super_admin.png' %}"
+                    alt="Generic placeholder image" width="30" />
+                <div class="flex-1">
+                    <h6 class="mb-0">Super Admin : False</h6>
+                </div>
+                </a>
+                <a class="d-flex align-items-center mb-2" href="#"><img class="align-self-center me-2" src="{% static 'admin\img\user-details\admin.png' %}"
+                        alt="Generic placeholder image" width="30" />
+                    <div class="flex-1">
+                        <h6 class="mb-0">Admin : False</h6>
+                    </div>
+                </a> -->
+                <a class="d-flex align-items-center mb-2" href="#"><img class="align-self-center me-2" src="{% static 'admin\img\user-details\user.png' %}"
+                        alt="Generic placeholder image" width="30" />
+                    <div class="flex-1">
+                        <h5 class="mb-0">User Type : 
+                            {% if user.user_type == 'admin' %}
+                                <span class="text-danger fw-bold" >Admin</span>
+                            {% elif user.user_type == 'seller' %}
+                                <span class="text-primary fw-bold">Seller</span>
+                            {% elif user.user_type == 'customer' %}
+                                <span class="text-success fw-bold">Customer</span>
+                            {% endif %}
+                        </h5>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h5 class="mb-0">User Details</h5>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card-body bg-light border-top">
+        <div class="row">
+            <div class="col-lg col-xxl-7">
+                <table class="table table-bordered table-striped">
+                    <h6 class="fw-semi-bold ls mb-3 text-uppercase">Basic Information</h6>
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-semi-bold">Name:</td>
+                            <td>{{ user.name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Phone Number:</td>
+                            <td>{{ user.phone }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Email:</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Is Valide:</td>
+                            <td>
+                                {% if user.is_verified %}
+                                    <h5 class="text-success">Valided</h5> 
+                                {% else %} 
+                                    <h5 class="text-danger">Invalid!</h5>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="fw-semi-bold">User Type:</td>
+                            <td>{{ user.user_type }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Created At:</td>
+                            <td>{{ user.created_at }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Updated At:</td>
+                            <td>{{ user.updated_at }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Profile Image:</td>
+                            <td>
+                                <div class="position-relative h-sm-100">
+                                    {% if user.user_img %}
+                                        <img class="img-fluid fit-cover w-sm-30 h-sm-30 rounded-1 absolute-sm-centered" src="{{user.user_img.url}}" alt="" />
+                                    {% else %}
+                                        <p>N/A</p>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semi-bold">Cover Image:</td>
+                            <td>
+                                <div class="position-relative h-sm-100">
+                                    {% if user.user_cov_img %}
+                                        <img class="img-fluid fit-cover w-sm-30 h-sm-30 rounded-1 absolute-sm-centered" src="{{user.user_cov_img.url}}" alt="" />
+                                    {% else %}
+                                        <p>N/A</p>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>
+
+
+{% endblock content %}

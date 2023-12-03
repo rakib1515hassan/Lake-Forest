@@ -1,0 +1,48 @@
+.error-message {
+    color: red; /* Set the text color to red */
+    list-style: none; /* Remove list bullets */
+    margin: 0; /* Remove any default margin */
+    padding: 0; /* Remove any default padding */
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.user_img_show {
+    position: relative;
+    display: inline-block;
+}
+
+/* .user_img_show label {
+    display: block;
+} */
+
+.user_img_show img{
+    width: 180px;
+    height: 180px;
+    border-radius: 5%;
+    border: 1px solid #5e5c5c;
+    /* border-style: dotted; */
+    border-style: dashed ;
+}
+
+.show-img{
+    display: none;
+}
+
+.remove-image {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    cursor: pointer;
+    color: red;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* .user_img_show label:hover{
+    background-color: rgb(138, 134, 139);
+} */
+
+/* input{
+    height: 45px;
+} */

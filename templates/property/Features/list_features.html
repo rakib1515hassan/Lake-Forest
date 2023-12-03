@@ -1,0 +1,266 @@
+{% extends 'layouts/master.html' %}
+
+
+{% block title %}
+Address PMS | Property Featuers
+{% endblock title %}
+
+
+
+
+{% block styles %}
+
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+<style>
+    .action li {
+        display: inline;
+    }
+
+    .action li a {
+        color: #fff;
+        display: inline-block;
+        font-size: 14px;
+        margin-right: 5px;
+        line-height: 1.5;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+    }
+
+    .action li a i {
+        padding: 3px 5px;
+        border-radius: 3px;
+    }
+
+    .fa-pencil {
+        background: #37a000;
+    }
+
+        {
+        font-family: 'Josefin Sans', sans-serif !important;
+    }
+
+    .dataTables_wrapper {
+        display: grid;
+        grid-template-rows: repeat(2, auto);
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .dataTables_length {
+        width: fit-content;
+        grid-row: 1;
+        grid-column: 1;
+    }
+
+    .dataTables_length label {
+        display: flex;
+        align-items: center;
+    }
+
+    .dataTables_length label select {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .dataTables_filter {
+        width: fit-content;
+        grid-row: 1;
+        grid-column: 2;
+        justify-self: end;
+
+    }
+
+    .dataTables_filter label {
+        display: flex;
+        align-items: center;
+    }
+
+    .dataTables_filter label input {
+        margin-left: 5px;
+    }
+
+    .table {
+        grid-row: 2;
+        grid-column: 1 / span 2;
+    }
+
+    .dataTables_info {
+        width: fit-content;
+        grid-row: 3;
+        grid-column: 1;
+    }
+
+    .dataTables_paginate {
+        width: fit-content;
+        grid-row: 3;
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .datatable-column-filter-row {
+        display: none;
+    }
+
+    .avatar {
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    table {
+        text-align: center;
+    }
+    table th {
+        font-size: 15px;
+    }
+</style>
+{% endblock styles %}
+
+
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row flex-between-center">
+            <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Propery Features</h5>
+            </div>
+            <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                <div id="orders-actions">
+                    <a href="{% url 'property:property-features-create' %}" class="btn btn-konnect-default btn-sm" type="button"><span
+                            class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span
+                            class="d-none d-sm-inline-block ms-1">New</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="card-body p-4">
+
+        <div class="table-responsive">
+
+            <form class="d-flex col-sm-6 col-md-4 col-lg-3 mb-3" method="get">
+                <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search" value="{{ request.GET.search }}">
+                <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+            </form>            
+
+            <table width="100%" class="table table-sm table-striped fs--1 mb-0">
+                <tr>
+                    <th>No</th>
+                    <th>Propery Features Type</th>
+                    <th>Propery Features Image</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th width="200">Actions</th>
+                </tr>
+
+                {% for p_feature in page_obj %}
+                <tr>
+                    <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
+                    <td>{{p_feature.features_type}}</td>
+
+                    {% if p_feature.features_logo %}
+                    <td><img style="border-radius: 50%;" class="avatar" src="{{p_feature.features_logo.url }}"
+                            alt="{{p_feature.features_type}}" />
+                    </td>
+                    {% else %}
+                    <td>N/A</td>
+                    {% endif %}
+
+                    <td>{{p_feature.created_at|date:"d-M-Y"}}</td>
+                    <td>{{p_feature.updated_at|date:"d-M-Y"}}</td>
+
+                    <td>
+                        <ul class="action d-flex">
+                            <li>
+                                <a class="btn btn-warning btn-sm" type="button"
+                                    href="{% url 'property:property-features-update' p_feature.id %}">E</a>
+                            </li>
+                            <li>
+                                <a type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#deletefeature{{p_feature.id}}">
+                                    X
+                                </a>
+                            </li>
+                            {% include 'property/Features/delete.html' %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <div class="card-footer">
+            <div class="row justify-content-between">
+                <div class="col-md-6">
+                    <p>Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} out of {{ products_count }}</p>
+                </div>
+                <div class="col-md-2">
+        
+                </div>
+            </div>
+        </div>
+    
+        <nav aria-label="Page navigation example">
+            {% if page_obj.has_other_pages %}
+            <ul class="pagination justify-content-center">
+        
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">Previous</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">Previous</span>
+                        </a>
+                    </li>
+                {% endif %}
+        
+        
+        
+                {% for i in page_obj.paginator.page_range %} 
+                    {% if page_obj.number == i %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %} 
+                {% endfor %} 
+                
+                
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">Next</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" aria-label="Next">
+                            <span aria-hidden="true">Next</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </nav>
+    </div>
+
+
+</div>
+
+
+{% endblock content %}
