@@ -105,60 +105,47 @@ class UserRegistrationVerifyView(APIView):
 class UserRegistrationVerify_retry_View(APIView):
     def post(self, request, format=None):
         token = request.data.get('token')
-
-        try:
-            old_otp = UserOTP.objects.get(token=token)
+        if token:
             try:
-                user = User.objects.get(id = old_otp.user.id)
+                old_otp = UserOTP.objects.get(token=token)
+                try:
+                    user = User.objects.get(id = old_otp.user.id)
 
-                if user is not None:
-                    # UserOTP.objects.get(user = user).delete() ## Delete Old OTP
+                    if user is not None:
+                        # UserOTP.objects.get(user = user).delete() ## Delete Old OTP
 
-                    new_otp = UserOTP.objects.create(user=user) ## New OTP Create 
-                    old_otp.delete()                            ## Delete Old OTP
+                        new_otp = UserOTP.objects.create(user=user) ## New OTP Create 
+                        old_otp.delete()                            ## Delete Old OTP
 
-                    # html_content = render_to_string('mail/otp_mail.html', {
-                    #     'user': user,
-                    #     'code': new_otp.otp
-                    # })
+                        html_content = render_to_string('mail/otp_mail.html', {
+                            'user': user,
+                            'code': new_otp.otp
+                        })
 
-                    # html_mail_sender(
-                    #     'Please verify your Account',  ## subject
-                    #     html_content,                  ## html_content
-                    #     [user.email],                  ## to
-                    # )
+                        html_mail_sender(
+                            'Please verify your Account',  ## subject
+                            html_content,                  ## html_content
+                            [user.email],                  ## to
+                        )
+                        
+                        # print("--------------------------------")
+                        # print(f"Name= {user.name}, OTP= {new_otp.otp}, Token= {new_otp.token}")
+                        # print("--------------------------------")
+
+                        msg = {
+                            'token': new_otp.token,
+                            'message':'Once again OTP has been sent on your email or phone number.'
+                        }
+                        return api_success('', status=201, message=msg)
                     
-                    # ## Phone varification
-                    # body = f"""
-                    #             Welcome to Address PMS
-                    #             Hi, {user.name}, 
-                    #             Thank you for registering with us. Please use the following code to verify your account.
-                    #             Your verification OTP is {new_otp.otp}
+                except User.DoesNotExist:
+                    return api_error({'errors': 'Invalid User'}, status=400, message="Validation error!")
 
-                    #             Regards,
-                    #             Address PMS Team
-                    #     """
-                    # sms_sender (
-                    #     user.phone,
-                    #     body,
-                    # )
-                    
-                    print("--------------------------------")
-                    print(f"Name= {user.name}, OTP= {new_otp.otp}, Token= {new_otp.token}")
-                    print("--------------------------------")
+            except UserOTP.DoesNotExist:
+                return api_error({'errors': 'Invalid token'}, status=400, message="Validation error!")
 
-                    msg = {
-                        'token': new_otp.token,
-                        'message':'Once again OTP has been sent on your email or phone number.'
-                    }
-                    return api_success('', status=201, message=msg)
-                
-            except User.DoesNotExist:
-                return api_error({'errors': 'Invalid User'}, status=400, message="Validation error!")
-
-        except UserOTP.DoesNotExist:
-            return api_error({'errors': 'Invalid token'}, status=400, message="Validation error!")
-
+        else:
+            return api_error({'token': 'Token is requered!'}, status=400, message="Validation error!")
      
 
 

@@ -95,9 +95,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             [user.email],                  ## to
         )
            
-        print("--------------------------------")
-        print(f"Name= {user.name}, OTP= {otp_obj.otp}, Token= {otp_obj.token}")
-        print("--------------------------------")
+        # print("--------------------------------")
+        # print(f"Name= {user.name}, OTP= {otp_obj.otp}, Token= {otp_obj.token}")
+        # print("--------------------------------")
 
         return user
 
