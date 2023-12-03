@@ -6,14 +6,14 @@ User = get_user_model()
 
 
 class UserLoginSerializer(serializers.Serializer):
-    email_or_phone = serializers.CharField()
-    password       = serializers.CharField(write_only=True)
+    email    = serializers.CharField()
+    password = serializers.CharField(write_only=True)
 
     def validate(self, atts):
-        email_or_phone = atts.get("email_or_phone")
+        email    = atts.get("email")
         password = atts.get("password")
 
-        user = User.objects.filter(Q(email=email_or_phone) | Q(phone=email_or_phone)).first()
+        user = User.objects.filter(email=email).first()
 
         if user:
             if user.check_password(password) == False:

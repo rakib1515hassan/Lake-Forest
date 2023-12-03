@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "39fdc651-7523-4d39-a8a4-acf78818e342",
+		"name": "Lake Forest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28499106"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Registrations",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Md Rakib Hassan",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "rakib1515hassan@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "member",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "mentor",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "123456ra",
+									"type": "text"
+								},
+								{
+									"key": "password2",
+									"value": "123456ra",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{domain}}/users/registration/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								""
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration Verification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_otp",
+									"value": "894367",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{otp_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{domain}}/users/registration-verification/"
+					},
+					"response": []
+				},
+				{
+					"name": "Registration Verification Retry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{otp_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{domain}}/users/registration-verification-retry/"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

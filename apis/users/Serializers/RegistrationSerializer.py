@@ -84,20 +84,20 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         otp_obj = UserOTP.objects.create(user=user)
 
         # Email Send on Email
-        html_content = render_to_string('mail/otp_mail.html', {
-            'user': user,
-            'code': otp_obj.otp
-        })
+        # html_content = render_to_string('mail/otp_mail.html', {
+        #     'user': user,
+        #     'code': otp_obj.otp
+        # })
 
-        html_mail_sender(
-            'Please verify your Account',  ## subject
-            html_content,                  ## html_content
-            [user.email],                  ## to
-        )
+        # html_mail_sender(
+        #     'Please verify your Account',  ## subject
+        #     html_content,                  ## html_content
+        #     [user.email],                  ## to
+        # )
            
-        # print("--------------------------------")
-        # print(f"Name= {user.name}, OTP= {otp_obj.otp}, Token= {otp_obj.token}")
-        # print("--------------------------------")
+        print("--------------------------------")
+        print(f"Name= {user.name}, OTP= {otp_obj.otp}, Token= {otp_obj.token}")
+        print("--------------------------------")
 
         return user
 

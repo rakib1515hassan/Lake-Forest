@@ -10,6 +10,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
+from apis.users.token import JWTBlacklistedTokenCheck
 from rest_framework.permissions import (
         IsAuthenticated, 
     )
@@ -21,7 +22,6 @@ from apps.core.utils import (
     api_error, 
     create_JWT_token, 
     html_mail_sender, 
-    sms_sender,
 )
 from rest_framework import serializers
 from apis.users.Serializers.RegistrationSerializer import (
@@ -161,8 +161,8 @@ class UserLoginView(APIView):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
-            email_or_phone = serializer.data.get('email_or_phone')
-            get_user = User.objects.filter(Q(email=email_or_phone) | Q(phone=email_or_phone)).first()
+            email    = serializer.data.get('email')
+            get_user = User.objects.filter(email=email).first()
 
             if get_user is not None:
                 if get_user.is_verified == True:
@@ -192,21 +192,6 @@ class UserLoginView(APIView):
                     #     html_content,                  ## html_content
                     #     [get_user.email],                  ## to
                     # )
-                    
-                    # ## Phone varification
-                    # body = f"""
-                    #             Welcome to Address PMS
-                    #             Hi, {get_user.name}, 
-                    #             Thank you for registering with us. Please use the following code to verify your account.
-                    #             Your verification OTP is {new_otp.otp}
-
-                    #             Regards,
-                    #             Address PMS Team
-                    #     """
-                    # sms_sender (
-                    #     get_user.phone,
-                    #     body,
-                    # )
 
                     print("--------------------------------")
                     print(f"User Name : {get_user.name}, User Otp : {new_otp.otp}")
@@ -214,7 +199,7 @@ class UserLoginView(APIView):
 
                     msg = {
                         'token': new_otp.token, 
-                        'message': 'Please verify your account. Verification OTP send on your email or phone number.'
+                        'message': 'Please verify your account. Verification OTP send on your email.'
                     }
                     return api_error({'errors': serializer.errors}, status=422, message=msg)
             else:
@@ -248,26 +233,33 @@ class UserLoginView(APIView):
 #         except Exception as e:
 #             return api_error({'errors': str(e)}, status=400, message='Invalid refresh token')
 
-# # class UserLogoutView(APIView):
-# #     authentication_classes = [JWTAuthentication]
-# #     permission_classes = [IsAuthenticated]
 
-# #     def post(self, request):
-# #         try:
-# #             refresh_token = request.data.get("refresh_token")
-# #             if not refresh_token:
-# #                 return api_error({'errors': 'Refresh token is required'}, status=400, message='Invalid refresh token')
 
-# #             token = RefreshToken(refresh_token)
-# #             token.blacklist()
 
-# #             # Assuming you are using Django's built-in logout function
-# #             logout(request)
+class UserLogoutView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-# #             return api_success('', status=200, message='User successfully logged out.')
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh_token")
+            if not refresh_token:
+                return api_error({'errors': {"refresh_token":"Refresh token is required!"}}, status=400, message='Invalid refresh token')
+            
+            # Check if the token is blacklisted
+            # if JWTBlacklistedTokenCheck(refresh_token) == False:
+            #     return api_error({'errors': {"refresh_token":"Refresh Token is blacklisted.!"}}, status=400, message='Invalid refresh token')
+            
+            token = RefreshToken(refresh_token)
+            token.blacklist()
 
-# #         except Exception as e:
-# #             return api_error({'errors': str(e)}, status=400, message='Invalid refresh token')
+            # Assuming you are using Django's built-in logout function
+            logout(request)
+
+            return api_success('', status=200, message='User successfully logged out.')
+
+        except Exception as e:
+            return api_error({'errors': str(e)}, status=400, message='Invalid refresh token')
 
 
 
@@ -393,64 +385,64 @@ class UserLoginView(APIView):
 
 
 
-# """
-#     Customer Update, Details and Delete View 
-#     @Rakib
-# """
-# class CustomerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-#     authentication_classes = [JWTAuthentication]
-#     permission_classes     = [IsAuthenticated]
-#     serializer_class = CustomerSerializer
-#     queryset = User.objects.all()
+"""
+    Customer Update, Details and Delete View 
+    @Rakib
+"""
+class CustomerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes     = [IsAuthenticated]
+    serializer_class = CustomerSerializer
+    queryset = User.objects.all()
 
-#     def get(self, request, *args, **kwargs):
-#         instance   = self.get_object()
-#         serializer = self.get_serializer(instance)
-#         msg = "User retrieved successfully!"
-#         return api_success(serializer.data, status=200, message=msg)
+    def get(self, request, *args, **kwargs):
+        instance   = self.get_object()
+        serializer = self.get_serializer(instance)
+        msg = "User retrieved successfully!"
+        return api_success(serializer.data, status=200, message=msg)
         
-#     def update(self, request, *args, **kwargs):
-#         fields_to_check = ['email','phone','is_active','is_verified','is_admin','is_superuser','created_at' ,'user_type','auth_provider']
+    def update(self, request, *args, **kwargs):
+        fields_to_check = ['email','phone','is_active','is_verified','is_admin','is_superuser','created_at' ,'user_type','auth_provider']
 
-#         try:
-#             instance = self.get_object()
-#             serializer = self.get_serializer(instance, data=request.data, partial=kwargs.get('partial', False))
+        try:
+            instance = self.get_object()
+            serializer = self.get_serializer(instance, data=request.data, partial=kwargs.get('partial', False))
 
-#             if serializer.is_valid():
-#                 for field in fields_to_check:
-#                     if field in request.data:
-#                         raise serializers.ValidationError(f"Cannot update the '{field}' field!")
+            if serializer.is_valid():
+                for field in fields_to_check:
+                    if field in request.data:
+                        raise serializers.ValidationError(f"Cannot update the '{field}' field!")
 
-#                 self.perform_update(serializer)
-#                 msg = "User updated successfully!"
-#                 return api_success(serializer.data, status=200, message=msg)
-#             else:
-#                 return api_error({'errors': serializer.errors}, status=422, message="Validation error!")
-#         except ValidationError as e:
-#             return api_error({'errors': e.detail}, status=422, message="Validation error!")
+                self.perform_update(serializer)
+                msg = "User updated successfully!"
+                return api_success(serializer.data, status=200, message=msg)
+            else:
+                return api_error({'errors': serializer.errors}, status=422, message="Validation error!")
+        except ValidationError as e:
+            return api_error({'errors': e.detail}, status=422, message="Validation error!")
 
-#     def destroy(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         self.perform_destroy(instance)
-#         msg = "User deleted successfully!"
-#         return api_success({}, status=204, message=msg)
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        msg = "User deleted successfully!"
+        return api_success({}, status=204, message=msg)
 
-#     def perform_destroy(self, instance):
-#         instance.delete()
+    def perform_destroy(self, instance):
+        instance.delete()
 
-#     # def handle_exception(self, exc):
-#     #     # Customize the error response
-#     #     if isinstance(exc, serializers.ValidationError):
-#     #         return Response(api_error({'errors': exc.detail}, status=422, message="Validation error!"))
-#     #     return super().handle_exception(exc)
+    # def handle_exception(self, exc):
+    #     # Customize the error response
+    #     if isinstance(exc, serializers.ValidationError):
+    #         return Response(api_error({'errors': exc.detail}, status=422, message="Validation error!"))
+    #     return super().handle_exception(exc)
 
 
-#     # def get_queryset(self):
-#     #     user = self.request.user
-#     #     if user.is_staff:
-#     #         return User.objects.all()
-#     #     else:
-#     #         return User.objects.filter(id=user.id)
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.is_staff:
+    #         return User.objects.all()
+    #     else:
+    #         return User.objects.filter(id=user.id)
 
     
 
