@@ -3,7 +3,7 @@ from shutil import rmtree
 
 from django.core.management.base import BaseCommand
 
-from library_backend.settings import BASE_DIR
+from lake_forest.settings import BASE_DIR
 
 
 class Command(BaseCommand):

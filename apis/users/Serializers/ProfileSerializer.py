@@ -17,13 +17,18 @@ class CustomerSerializer(serializers.ModelSerializer):
             'is_admin'     : {'read_only': True},
             'is_superuser' : {'read_only': True},
             'created_at'   : {'read_only': True},
-            'user_type'    : {'read_only': True},
-            'auth_provider': {'read_only': True},
+            'role'         : {'read_only': True},
             'email'        : {'read_only': True},
-            'phone'        : {'read_only': True},
-
             'name'         : {'required': True},
         }
+
+    # id = serializers.UUIDField(source='pk', format='hex', read_only=True)
+
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     # Convert the 'id' field to a string
+    #     data['id'] = str(instance.id)
+    #     return data
 
 
 

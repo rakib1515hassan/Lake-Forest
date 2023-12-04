@@ -1,12 +1,22 @@
 from rest_framework import serializers
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import get_user_model, authenticate
 User = get_user_model()
 
 
 class UserChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True)
-    password     = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True)
-    password2    = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True)
+    password = serializers.CharField(
+            write_only=True, 
+            required=True, 
+            validators=[validate_password], 
+            style={'input_type':'password'}
+        )
+    password2 = serializers.CharField(
+            write_only=True, 
+            required=True, 
+            style={'input_type':'password'}
+        )
 
     class Meta:
         fields = ['old_password', 'password', 'password2']

@@ -38,12 +38,6 @@ class User(AbstractBaseUser, TimestampedModel, PermissionsMixin):
 
     profile_img    = models.ImageField(upload_to="ProfileImage/", null=True, blank=True)
 
-    ## User Address
-    # division     = models.CharField( max_length=50,    null = True, blank = True )
-    # sub_division = models.CharField( max_length=50,    null = True, blank = True )
-    # zip_code     = models.CharField( max_length=12,    null = True, blank = True )
-    # home         = models.CharField( max_length = 500, null = True, blank = True )
-
     ## User Permission and Roll
     is_active   = models.BooleanField(default = True)
     is_admin    = models.BooleanField(default = False)
@@ -54,6 +48,9 @@ class User(AbstractBaseUser, TimestampedModel, PermissionsMixin):
         choices = UserRole.choices,
         null=True, blank=True
     )
+
+    short_description = models.TextField(null= True, blank= True)
+    description       = models.TextField(null= True, blank= True)
 
     objects = UserManager()
 
@@ -116,21 +113,46 @@ class UserOTP(TimestampedModel):
             self.token = self.generate_token()
 
         super().save(*args, **kwargs)
+
+        
+    
+
+
+class Occupation(TimestampedModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_occupation')
+    
+    organization = models.CharField(max_length=225, null=True, blank=True)
+    designation  = models.CharField(max_length=225, null=True, blank=True)
+    
+    def __str__(self):
+        return self.organization
     
 
 
 
-# class UserAddress(TimestampedModel):
-#     id       = models.UUIDField( primary_key = True, unique = True, default = uuid.uuid4, editable = False )
-#     user     = models.ForeignKey( User, on_delete = models.CASCADE, related_name='useraddress' )
+class Academic(TimestampedModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-#     division     = models.CharField( max_length=50,    null = True, blank = True )
-#     sub_division = models.CharField( max_length=50,    null = True, blank = True )
-#     zip_code     = models.CharField( max_length=12,    null = True, blank = True )
-#     home         = models.CharField( max_length = 500, null = True, blank = True )
+    roll       = models.CharField(max_length=225, null=True, blank=True)
+    institute  = models.CharField(max_length=225, null=True, blank=True)
+    department = models.CharField(max_length=225, null=True, blank=True)
+    session    = models.CharField(max_length=225, null=True, blank=True)
 
-#     def __str__(self):
-#         return f"Email = {self.user.email}, Address Type = {self.division}"
-    
+    def __str__(self):
+        return f"{self.user.name}, {self.roll}" 
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

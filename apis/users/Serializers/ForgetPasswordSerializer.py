@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
+from django.contrib.auth.password_validation import validate_password
 from django.template.loader import render_to_string
 from apps.core.utils import html_mail_sender, sms_sender
 from apps.users.models import UserOTP
@@ -34,35 +35,20 @@ class FP_OTPSendSerializer(serializers.Serializer):
 
             otp_obj = UserOTP.objects.create(user = user)
 
-            html_content = render_to_string('mail/forget_password_mail.html', {
-                'user': user,
-                'code': otp_obj.otp
-            })
+            # html_content = render_to_string('mail/forget_password_mail.html', {
+            #     'user': user,
+            #     'code': otp_obj.otp
+            # })
 
-            html_mail_sender(
-                'Recover your account.',  ## subject
-                html_content,                  ## html_content
-                [user.email],                  ## to
-            )
+            # html_mail_sender(
+            #     'Recover your account.',  ## subject
+            #     html_content,                  ## html_content
+            #     [user.email],                  ## to
+            # )
             
-            ## Phone varification
-            body = f"""
-                        Welcome to Address PMS
-                        Hi, {user.name}, 
-                        To recover your account.
-                        Your verification OTP is {otp_obj.otp}
-
-                        Regards,
-                        Address PMS Team
-                """
-            sms_sender (
-                user.phone,
-                body,
-            )
-
-            # print("--------------------------------")
-            # print(f"User Name : {user.name}, User Otp : {otp_obj.otp}")
-            # print("--------------------------------")
+            print("--------------------------------")
+            print(f"User Name : {user.name}, User Otp : {otp_obj.otp}")
+            print("--------------------------------")
 
             return attrs
         
@@ -115,8 +101,17 @@ class FP_OTPVerificationSerializer(serializers.Serializer):
 
 
 class FP_PasswordSetSerializer(serializers.Serializer):
-    password  = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
-    password2 = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
+    password = serializers.CharField(
+            write_only=True, 
+            required=True, 
+            validators=[validate_password], 
+            style={'input_type':'password'}
+        )
+    password2 = serializers.CharField(
+            write_only=True, 
+            required=True, 
+            style={'input_type':'password'}
+        )
     token     = serializers.CharField(max_length=100, required=True)
     class Meta:
         fields = ['password', 'password2', 'token']
@@ -182,35 +177,21 @@ class FP_OTPResendSerializer(serializers.Serializer):
 
             new_otp_obj = UserOTP.objects.create(user = user)
 
-            html_content = render_to_string('mail/forget_password_mail.html', {
-                'user': user,
-                'code': new_otp_obj.otp
-            })
+            # html_content = render_to_string('mail/forget_password_mail.html', {
+            #     'user': user,
+            #     'code': new_otp_obj.otp
+            # })
 
-            html_mail_sender(
-                'Recover your account.',  ## subject
-                html_content,             ## html_content
-                [user.email],             ## to
-            )
+            # html_mail_sender(
+            #     'Recover your account.',  ## subject
+            #     html_content,             ## html_content
+            #     [user.email],             ## to
+            # )
             
-            ## Phone varification
-            body = f"""
-                        Welcome to Address PMS
-                        Hi, {user.name}, 
-                        To recover your account.
-                        Your verification OTP is {new_otp_obj.otp}
 
-                        Regards,
-                        Address PMS Team
-                """
-            sms_sender (
-                user.phone,
-                body,
-            )
-
-            # print("--------------------------------")
-            # print(f"User Name : {user.name}, User Otp : {new_otp_obj.otp}")
-            # print("--------------------------------")
+            print("--------------------------------")
+            print(f"User Name : {user.name}, User Otp : {new_otp_obj.otp}")
+            print("--------------------------------")
 
             return attrs
         
