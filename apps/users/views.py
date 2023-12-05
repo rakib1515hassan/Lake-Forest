@@ -1,114 +1,35 @@
-# from django.shortcuts import render, redirect
-# from django.contrib.auth import get_user_model
-# User = get_user_model()
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.contrib import messages
-# from django.contrib.auth import authenticate, login, logout
-# from django.db.models import Q
-# from django.http import HttpRequest, HttpResponse, JsonResponse
-# from django.utils.http import url_has_allowed_host_and_scheme
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.utils.http import url_has_allowed_host_and_scheme
 
-# from django.views import View
-# from django.views.generic.edit import UpdateView
-# from django.views.generic import (
-#     ListView, 
-#     DetailView, 
-#     CreateView,
-#     # UpdateView, 
-#     DeleteView, 
-#     TemplateView, 
-#     RedirectView,
-# )
-# from apps.users.forms import UserCreationForm, UserUpdateForm
-# from django.urls import reverse
-# from django.contrib.auth.decorators import user_passes_test
-# from django.utils.decorators import method_decorator
-# from apps.dashboards.permission import is_superuser_or_staff
-# from django.shortcuts import get_object_or_404
-# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-# from django.http import Http404
-
-
-# """
-#     Admin Login
-#     @Rakib
-# """
-# class LoginView(View):
-#     template_name = "users/login.html"
-
-#     def get(self, request, *args, **kwargs):
-#         # Check if the user is already authenticated, and if so, redirect them to their requested page.
-#         if request.user.is_authenticated:
-#             next_url = request.GET.get('next')
-#             if next_url and url_has_allowed_host_and_scheme(next_url, request.get_host()):
-#                 return redirect(next_url)
-#             return redirect('dashboards:home')  # Redirect to the home page by default if no valid 'next' parameter.
-        
-#         return render(request, self.template_name)
+from django.views import View
+from django.views.generic.edit import UpdateView
+from django.views.generic import (
+    ListView, 
+    DetailView, 
+    CreateView,
+    # UpdateView, 
+    DeleteView, 
+    TemplateView, 
+    RedirectView,
+)
+from apps.users.forms import UserCreationForm, UserUpdateForm
+from django.urls import reverse
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import method_decorator
+from apps.dashboards.permission import is_superuser_or_staff
+from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import Http404
 
 
-#     def post(self, request, *args, **kwargs):
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-
-#         if User.objects.filter(email=email).first():
-#             auth_user = authenticate(request, email=email, password=password)
-
-#             if auth_user is not None:
-#                 if auth_user.is_admin == True:
-#                     login(request, auth_user)
-#                     next_url = request.GET.get('next')
-
-#                     if next_url and url_has_allowed_host_and_scheme(url=next_url, allowed_hosts={request.get_host()}):
-#                         return redirect(next_url)
-#                     return redirect('dashboards:home')
-                
-#                 else:
-#                     error = 'Only admin users can login.'
-#                     return render(request, self.template_name, {'error': error})
-
-#             else:
-#                 response = {
-#                     'error': 'Invalid password',
-#                     'error_type': 'Password',
-#                     }
-#                 return render(request, self.template_name, response)
-
-#         else:
-#             response = {
-#                 'error': 'Invalid email.', 
-#                 'error_type':'Email'}
-#             return render(request, self.template_name, response)
-
-
-    
-
-
-# """
-#     Admin Logout
-#     @Rakib
-# """
-# @method_decorator(user_passes_test(is_superuser_or_staff, 
-#     login_url='/admin/users/login/?next'), name='dispatch')
-# class LogoutView(View):
-#     def get(self, request):
-#         if request.user.is_authenticated:
-#             logout(request)
-#         return render(request, "users/logout.html")
-    
-
-
-# """
-#     Other's user can login
-#     @Rakib
-# """
-# class RestrictedView(View, LoginRequiredMixin):
-#     def get(self, request):
-#         if request.user.is_authenticated:
-#             return render(request, "users/restricted.html")
-#         else:
-#            return redirect('users:login')
         
 
 

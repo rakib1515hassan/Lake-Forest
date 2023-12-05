@@ -5,8 +5,11 @@ app_name = 'dashboards'
 
 
 urlpatterns = [
-    # path('', views.Home.as_view(), name='home'),
-    path('', views.Home, name='home'),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('restrict/', views.RestrictedView.as_view(), name='restrict'),
+
+    path('', views.Home.as_view(), name='home'),
 
 
 ]

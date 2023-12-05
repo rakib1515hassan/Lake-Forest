@@ -1,0 +1,308 @@
+{
+	"info": {
+		"_postman_id": "39fdc651-7523-4d39-a8a4-acf78818e342",
+		"name": "Lake Forest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28499106"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Forget Password",
+					"item": [
+						{
+							"name": "FP OTP Send",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "rakib1515hassan@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{domain}}/users/forget-password-otp-send/"
+							},
+							"response": []
+						},
+						{
+							"name": "FP OTP Verify",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_otp",
+											"value": "333013",
+											"type": "text"
+										},
+										{
+											"key": "token",
+											"value": "{{otp_token}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{domain}}/users/forget-password-otp-verify/"
+							},
+							"response": []
+						},
+						{
+							"name": "FP Password Set",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "password",
+											"value": "123456rak",
+											"type": "text"
+										},
+										{
+											"key": "password2",
+											"value": "123456rak",
+											"type": "text"
+										},
+										{
+											"key": "token",
+											"value": "{{otp_token}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{domain}}/users/forget-password-set/"
+							},
+							"response": []
+						},
+						{
+							"name": "FP OTP Resend",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "token",
+											"value": "{{otp_token}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{domain}}/users/forget-password-otp-resend/"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Registrations",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Md Rakib Hassan",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "rakib1515hassan@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "member",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "mentor",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "123456ra",
+									"type": "text"
+								},
+								{
+									"key": "password2",
+									"value": "123456ra",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{domain}}/users/registration/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								""
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration Verification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_otp",
+									"value": "351734",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "{{otp_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{domain}}/users/registration-verification/"
+					},
+					"response": []
+				},
+				{
+					"name": "Registration Verification Retry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{otp_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{domain}}/users/registration-verification-retry/"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "rakib1515hassan@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456ra",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{domain}}/users/login/"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refresh_token",
+									"value": "{{jwt_refresh_token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{domain}}/users/logout/"
+					},
+					"response": []
+				},
+				{
+					"name": "Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "{{domain}}/users/user/e87d4309-1375-45cb-b225-9ec1e1647a20/"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "profile",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

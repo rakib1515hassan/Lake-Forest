@@ -27,7 +27,7 @@ class Event(TimestampedModel):
     Presentation      = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.Title
+        return self.title
     
 
 class EventsSchedule(TimestampedModel):
