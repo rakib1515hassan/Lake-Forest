@@ -17,129 +17,126 @@ User = get_user_model()
 import random
 
 
-
-
 class FP_OTPSendSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=255, required=True)
 
     class Meta:
-        fields = ['email']
+        fields = ["email"]
 
     def validate(self, attrs):
-        email = attrs.get('email')
+        email = attrs.get("email")
         user = User.objects.filter(email=email).first()
 
-        if user:    
-            if UserOTP.objects.filter(user = user).exists():
-                UserOTP.objects.get(user = user).delete()
+        if user:
+            if UserOTP.objects.filter(user=user).exists():
+                UserOTP.objects.get(user=user).delete()
 
-            otp_obj = UserOTP.objects.create(user = user)
+            otp_obj = UserOTP.objects.create(user=user)
 
-            # html_content = render_to_string('mail/forget_password_mail.html', {
-            #     'user': user,
-            #     'code': otp_obj.otp
-            # })
+            html_content = render_to_string(
+                "mail/forget_password_mail.html", {"user": user, "code": otp_obj.otp}
+            )
 
-            # html_mail_sender(
-            #     'Recover your account.',  ## subject
-            #     html_content,                  ## html_content
-            #     [user.email],                  ## to
-            # )
-            
-            print("--------------------------------")
-            print(f"User Name : {user.name}, User Otp : {otp_obj.otp}")
-            print("--------------------------------")
+            html_mail_sender(
+                "Recover your account.",  ## subject
+                html_content,  ## html_content
+                [user.email],  ## to
+            )
+
+            # print("--------------------------------")
+            # print(f"User Name : {user.name}, User Otp : {otp_obj.otp}")
+            # print("--------------------------------")
 
             return attrs
-        
-        raise serializers.ValidationError('Unregistered User!')
 
-
+        raise serializers.ValidationError("Unregistered User!")
 
 
 class FP_OTPVerificationSerializer(serializers.Serializer):
     user_otp = serializers.IntegerField(required=True)
-    token    = serializers.CharField(max_length=100, required=True)
+    token = serializers.CharField(max_length=100, required=True)
 
     class Meta:
-        fields = ['user_otp', 'token']
+        fields = ["user_otp", "token"]
 
         extra_kwargs = {
-            'user_otp':{'required': True},
-            'token'   :{'required': True},
+            "user_otp": {"required": True},
+            "token": {"required": True},
         }
 
     def validate(self, attrs):
-        otp_token = attrs.get('token') 
-        user_otp  = attrs.get('user_otp')
+        otp_token = attrs.get("token")
+        user_otp = attrs.get("user_otp")
 
-        otp_user = UserOTP.objects.filter(token = otp_token).first()
+        otp_user = UserOTP.objects.filter(token=otp_token).first()
         if otp_user is not None:
             if otp_user.otp == user_otp:
                 otp_time = otp_user.created_at
 
                 # Make the timeout timezone-aware with the same timezone as otp_time
-                timeout = otp_time + timedelta( minutes = settings.OTP_TIMEOUT )
+                timeout = otp_time + timedelta(minutes=settings.OTP_TIMEOUT)
                 timeout = timeout.replace(tzinfo=otp_time.tzinfo)
 
                 current_time = timezone.now()
 
                 if current_time > timeout:
-                    raise serializers.ValidationError("OTP verification time has expired.")
+                    raise serializers.ValidationError(
+                        "OTP verification time has expired."
+                    )
 
                 else:
                     otp_user.is_used = True
                     otp_user.save()
                     return attrs
-            
+
             raise serializers.ValidationError("OTP doesn't match.")
-            
+
         raise serializers.ValidationError("Token is not valid!")
-
-
-
 
 
 class FP_PasswordSetSerializer(serializers.Serializer):
     password = serializers.CharField(
-            write_only=True, 
-            required=True, 
-            validators=[validate_password], 
-            style={'input_type':'password'}
-        )
+        write_only=True,
+        required=True,
+        validators=[validate_password],
+        style={"input_type": "password"},
+    )
     password2 = serializers.CharField(
-            write_only=True, 
-            required=True, 
-            style={'input_type':'password'}
-        )
-    token     = serializers.CharField(max_length=100, required=True)
-    class Meta:
-        fields = ['password', 'password2', 'token']
+        write_only=True, required=True, style={"input_type": "password"}
+    )
+    token = serializers.CharField(max_length=100, required=True)
 
+    class Meta:
+        fields = ["password", "password2", "token"]
 
     # Password must be at least 8 characters long and contain at least one letter.
     def validate_password(self, value):
-        password  = self.initial_data.get('password')
-        password2 = self.initial_data.get('password2')
+        password = self.initial_data.get("password")
+        password2 = self.initial_data.get("password2")
 
         if password != password2:
-            raise serializers.ValidationError("Password and Confirm Password don't match")
+            raise serializers.ValidationError(
+                "Password and Confirm Password don't match"
+            )
 
         if len(password) < 8 or not any(char.isalpha() for char in password):
-            raise serializers.ValidationError("Password must be at least 8 characters long and contain at least one letter.")
+            raise serializers.ValidationError(
+                "Password must be at least 8 characters long and contain at least one letter."
+            )
 
         return value
-    
-    
+
     def validate(self, attrs):
-        otp_token = attrs.get('token')
-        password  = attrs.get('password')
-        password2 = attrs.get('password2')
-     
+        otp_token = attrs.get("token")
+        password = attrs.get("password")
+        password2 = attrs.get("password2")
+
         if password != password2:
-            raise serializers.ValidationError("Password and Confirm Password doesn't match")
-        
-        otp_obj = UserOTP.objects.filter(token = otp_token).first()
+            raise serializers.ValidationError(
+                "Password and Confirm Password doesn't match"
+            )
+
+        otp_obj = UserOTP.objects.filter(token=otp_token).first()
 
         if otp_obj:
             if otp_obj.is_used:
@@ -149,33 +146,33 @@ class FP_PasswordSetSerializer(serializers.Serializer):
                 return attrs
 
             else:
-                raise serializers.ValidationError("Please match OTP first, then set password!")
+                raise serializers.ValidationError(
+                    "Please match OTP first, then set password!"
+                )
 
         raise serializers.ValidationError("Unregistered User!")
 
 
-
-
 class FP_OTPResendSerializer(serializers.Serializer):
-    token    = serializers.CharField(max_length=100, required=True)
+    token = serializers.CharField(max_length=100, required=True)
 
     class Meta:
-        fields = ['token']
+        fields = ["token"]
 
         extra_kwargs = {
-            'token'   :{'required': True},
+            "token": {"required": True},
         }
-    
+
     def validate(self, attrs):
-        otp_token = attrs.get('token')
+        otp_token = attrs.get("token")
 
-        otp_obj = UserOTP.objects.filter(token = otp_token).first()
-        user    = User.objects.filter(id = otp_obj.user.id).first()
+        otp_obj = UserOTP.objects.filter(token=otp_token).first()
+        user = User.objects.filter(id=otp_obj.user.id).first()
 
-        if otp_obj and user:    
+        if otp_obj and user:
             otp_obj.delete()
 
-            new_otp_obj = UserOTP.objects.create(user = user)
+            new_otp_obj = UserOTP.objects.create(user=user)
 
             # html_content = render_to_string('mail/forget_password_mail.html', {
             #     'user': user,
@@ -187,12 +184,11 @@ class FP_OTPResendSerializer(serializers.Serializer):
             #     html_content,             ## html_content
             #     [user.email],             ## to
             # )
-            
 
             print("--------------------------------")
             print(f"User Name : {user.name}, User Otp : {new_otp_obj.otp}")
             print("--------------------------------")
 
             return attrs
-        
-        raise serializers.ValidationError('Unregistered User!')
+
+        raise serializers.ValidationError("Unregistered User!")
