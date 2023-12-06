@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from lake_forest.settings import BASE_DIR
 
-
+## Create New App (python manage.py newapp your_app_name) 
 class Command(BaseCommand):
     help = 'For creating new django app'
 

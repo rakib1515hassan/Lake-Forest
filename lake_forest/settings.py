@@ -34,6 +34,7 @@ CUSTOM_APPS = [
     'apps.dashboards.apps.DashboardsConfig',
     'apps.users.apps.UsersConfig',
     'apps.events.apps.EventsConfig',
+    'apps.repositorys.apps.RepositorysConfig',
 ]
 
 # Application definition

@@ -2,13 +2,6 @@
 {% load static %}
 
 <nav class="navbar navbar-light navbar-vertical navbar-expand-xl" style="display: none">
-    {#    <script>#}
-    {#        var navbarStyle = localStorage.getItem("navbarStyle");#}
-    {#        if (navbarStyle && navbarStyle !== 'transparent') {#}
-    {#            document.querySelector('.navbar-vertical').classList.add(`navbar-${navbarStyle}`);#}
-    {#        }#}
-    {#    </script>#}
-
     <div class="d-flex align-items-center">
         <div class="toggle-icon-wrapper">
             <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip"
@@ -21,7 +14,7 @@
         <a class="navbar-brand" href="{% url 'dashboards:home' %}">
             <div class="d-flex align-items-center py-3">
                 <img class="me-2" src="{% static 'assets/img/admin/pms_logo_1.png' %}" alt="" width="140"/>
-                {#                <span class="font-sans-serif">AddressPMS</span>#}
+                {#                <span class="font-sans-serif">Lake Forest</span>#}
             </div>
         </a>
     </div>
@@ -42,42 +35,103 @@
                     </a>
                 </li>
 
-                <!-- Property -->
+                <!-- User -->
                 <li class="nav-item">
                     <a class="nav-link dropdown-indicator "
+                       href="#groups" role="button" data-bs-toggle="collapse"
+                       aria-expanded="false" aria-controls="groups">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-user"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">User</span>
+                        </div>
+                    </a>
+
+                    <ul class="nav collapse "
+                        id="groups">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="" aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-text ps-1">Add User</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link "
+                               href="" aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-text ps-1">Member List</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link "
+                               href="" aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-text ps-1">Mentor List</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+
+                    </ul>
+                </li>
+
+                <!-- Event -->
+                <li class="nav-item">
+                    <a class="nav-link dropdown-indicator {% active_menu request 'events:event_category_list,events:event_list,events:event_comment_list,events:event_participant_list' %}"
+
                        href="#events" role="button" data-bs-toggle="collapse"
                        aria-expanded="false" aria-controls="events">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
-                                <span class="fas fa-house-user"></span>
+                                <span class="fas fa-wallet"></span>
                             </span>
-                      
-                            <span class="nav-link-text ps-1">Property</span>
+                            <span class="nav-link-text ps-1">Events</span>
                         </div>
                     </a>
-                    <ul class="nav collapse "
+                    <ul class="nav collapse {% active_menu request 'events:event_category_list,events:event_list,events:event_comment_list,events:event_participant_list' 'show' %}"
                         id="events">
+
                         <li class="nav-item">
-                            <a class="nav-link "
-                            href="{% url 'property:property-list' %}" aria-expanded="false">
+                            <a class="nav-link {% active_menu request 'events:event_category_list' %}"
+                               href="" aria-expanded="false">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1" >Property List</span> 
+                                    <span class="nav-link-text ps-1">Event Create</span>
                                 </div>
                             </a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link"
-                            href="{% url 'property:property-create' %}" aria-expanded="false">
+                            <a class="nav-link {% active_menu request 'events:event_category_list' %}"
+                               href="" aria-expanded="false">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1" >Add Property</span>
+                                    <span class="nav-link-text ps-1">Event List</span>
                                 </div>
                             </a>
                         </li>
-                        
+
                     </ul>
                 </li>
 
-                <!-- Property Features -->
+                <!-- Team List -->
+                <li class="nav-item">
+                    <a class="nav-link " href="">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-user-friends"></span>
+                            </span>
+                            <span class="nav-link-text ps-1">Team List</span>
+                        </div>
+                    </a>
+                </li>
+
+                <!-- Research Repository -->
                 <li class="nav-item">
                     <a class="nav-link dropdown-indicator" href="#tasks" role="button" data-bs-toggle="collapse"
                        aria-expanded="false" aria-controls="tasks">
@@ -85,143 +139,14 @@
                             <span class="nav-link-icon">
                                 <span class="fas fa-tasks"></span>
                             </span>
-                            <span class="nav-link-text ps-1">Property Features</span>
+                            <span class="nav-link-text ps-1">Research Repository</span>
                         </div>
                     </a>
                     <ul class="nav collapse" id="tasks">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'property:property-features' %}" aria-expanded="false">
+                            <a class="nav-link" href="" aria-expanded="false">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Features List</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link " href="{% url 'property:property-features-create' %}" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Add New Features</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Property Purpose -->
-                <li class="nav-item">
-                    <a class="nav-link dropdown-indicator" href="#tasks2" role="button" data-bs-toggle="collapse"
-                       aria-expanded="false" aria-controls="tasks2">
-                        <div class="d-flex align-items-center">
-                            <span class="nav-link-icon">
-                                <span class="fas fa-tasks"></span>
-                            </span>
-                            <span class="nav-link-text ps-1">Property Purpose</span>
-                        </div>
-                    </a>
-                    <ul class="nav collapse" id="tasks2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'property:property-purpose' %}" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Purpose List</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="{% url 'property:property-purpose-create' %}" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Add New Purpose</span>
-                                </div>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-
-                <!-- Property Type -->
-                <li class="nav-item">
-                    <a class="nav-link dropdown-indicator" href="#tasks3" role="button" data-bs-toggle="collapse"
-                       aria-expanded="false" aria-controls="tasks3">
-                        <div class="d-flex align-items-center">
-                            <span class="nav-link-icon">
-                                <span class="fas fa-tasks"></span>
-                            </span>
-                            <span class="nav-link-text ps-1">Property Type</span>
-                        </div>
-                    </a>
-                    <ul class="nav collapse" id="tasks3">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'property:property-type' %}" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Type List</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'property:property-type-create' %}" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Add New Type</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Customers -->
-                <li class="nav-item">
-                    <a class="nav-link dropdown-indicator "
-                       href="#groups" role="button" data-bs-toggle="collapse"
-                       aria-expanded="false" aria-controls="groups">
-                        <div class="d-flex align-items-center">
-                            <span class="nav-link-icon">
-                                <span class="fas fa-user-friends"></span>
-                            </span>
-                            <span class="nav-link-text ps-1">Customers</span>
-                        </div>
-                    </a>
-
-                    <ul class="nav collapse "
-                        id="groups">
-                        <li class="nav-item">
-                            <a class="nav-link "
-                               href="{% url 'users:user-list' %}" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Customer List</span>
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               href="{% url 'users:user-create' %}" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Add New Customer</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-
-                    </ul>
-                </li>
-
-                <!-- Seller -->
-                <li class="nav-item">
-                    <!-- dropdown indicator of account setup-->
-                    <a class="nav-link dropdown-indicator " href="#user-setup" role="button" data-bs-toggle="collapse"
-                       aria-expanded="false" aria-controls="account-setup">
-                        <div class="d-flex align-items-center">
-                            <span class="nav-link-icon">
-                                <span class="fas fa-user"></span>
-                            </span>
-                            <span class="nav-link-text ps-1">Seller</span>
-                        </div>
-                    </a>
-
-                    <ul class="nav collapse " id="user-setup">
-                        <li class="nav-item">
-                            <a class="nav-link " href="" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1" >Authors List</span> 
+                                    <span class="nav-link-text ps-1">Repository Create</span>
                                 </div>
                             </a>
                         </li>
@@ -229,12 +154,11 @@
                         <li class="nav-item">
                             <a class="nav-link " href="" aria-expanded="false">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Add New Authors</span>
+                                    <span class="nav-link-text ps-1">Repository List</span>
                                 </div>
                             </a>
                         </li>
                     </ul>
-
                 </li>
 
                 <!-- Admin -->
@@ -262,18 +186,18 @@
                     <ul class="nav collapse {% active_menu request 'users:user_list' 'show' %}" id="admin-setup">
                         <li class="nav-item">
                             <a class="nav-link {% active_menu request 'users:user_list' %}" 
-                               href="{% url 'dashboards:admin-list' %}" aria-expanded="false">
+                               href="" aria-expanded="false">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Admin List</span>
+                                    <span class="nav-link-text ps-1">Admin Create</span>
                                 </div>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link {% active_menu request 'users:user_list' %}" 
-                               href="{% url 'dashboards:admin-create' %}" aria-expanded="false">
+                               href="" aria-expanded="false">
                                 <div class="d-flex align-items-center">
-                                    <span class="nav-link-text ps-1">Admin Create</span>
+                                    <span class="nav-link-text ps-1">Admin List</span>
                                 </div>
                             </a>
                         </li>
@@ -577,7 +501,7 @@
                     <a class="dropdown-item" href="#">Feedback</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Settings</a>
-                    <a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a>
+                    <a class="dropdown-item" href="">Logout</a>
                 </div>
             </div>
         </li>
