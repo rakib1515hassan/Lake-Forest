@@ -84,7 +84,7 @@
 
                 <!-- Event -->
                 <li class="nav-item">
-                    <a class="nav-link dropdown-indicator {% active_menu request 'events:event_category_list,events:event_list,events:event_comment_list,events:event_participant_list' %}"
+                    <a class="nav-link dropdown-indicator {% active_menu request 'events:events-list, events:events-details, events:events-create' %}"
 
                        href="#events" role="button" data-bs-toggle="collapse"
                        aria-expanded="false" aria-controls="events">
@@ -95,12 +95,12 @@
                             <span class="nav-link-text ps-1">Events</span>
                         </div>
                     </a>
-                    <ul class="nav collapse {% active_menu request 'events:event_category_list,events:event_list,events:event_comment_list,events:event_participant_list' 'show' %}"
+                    <ul class="nav collapse {% active_menu request 'events:events-list, events:events-details, events:events-create' 'show' %}"
                         id="events">
 
                         <li class="nav-item">
-                            <a class="nav-link {% active_menu request 'events:event_category_list' %}"
-                               href="" aria-expanded="false">
+                            <a class="nav-link {% active_menu request 'events:events-create' %}"
+                               href="{% url 'events:events-create' %}" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-text ps-1">Event Create</span>
                                 </div>
@@ -108,13 +108,22 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link {% active_menu request 'events:event_category_list' %}"
-                               href="" aria-expanded="false">
+                            <a class="nav-link {% active_menu request 'events:events-list' %}"
+                               href="{% url 'events:events-list' %}" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-text ps-1">Event List</span>
                                 </div>
                             </a>
                         </li>
+
+                        <!-- <li class="nav-item">
+                            <a class="nav-link {% active_menu request 'events:events-details' %}"
+                               href=" url 'events:events-details' " aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-text ps-1">Event Details</span>
+                                </div>
+                            </a>
+                        </li> -->
 
                     </ul>
                 </li>
@@ -144,7 +153,7 @@
                     </a>
                     <ul class="nav collapse" id="tasks">
                         <li class="nav-item">
-                            <a class="nav-link" href="" aria-expanded="false">
+                            <a class="nav-link" href="{% url 'repositorys:events-repository-create' %}" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-text ps-1">Repository Create</span>
                                 </div>

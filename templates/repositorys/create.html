@@ -1,0 +1,249 @@
+{% extends 'layouts/master.html' %}
+
+{% load static %}
+
+{% block title %}
+    Research Repository Create | LakeForest
+{% endblock title %}
+
+
+{% block styles %}
+
+{% endblock styles %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <form class="card mb-3" method="post" enctype="multipart/form-data">
+                <div class="card-header">
+                    <div class="row flex-between-end">
+                        <div class="col-auto align-self-center">
+                            <h5 class="mb-0" data-anchor="data-anchor">
+                                <i class="fa fa-users me-2"></i>
+                                Create Research Repository 
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body bg-light">
+                    {% csrf_token %}
+                    
+                    <div class="show_item">
+                        <div class="form-group row mb-3">
+                            <label class="col-md-2 col-form-label" for="rule">Event</label>
+                            <div class="col-md-9">
+                                {{ form.event }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="show_item">
+                        <div class="form-group row mb-3">
+                            <label class="col-md-2 col-form-label" for="rule">Title</label>
+                            <div class="col-md-9">
+                                {{ form.title }}
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <div class="show_item">
+                        <div class="form-group row mb-3">
+                            <label class="col-md-2 col-form-label" for="rule">Description</label>
+                            <div class="col-md-9">
+                                {{ form.description }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="show_item">
+                        <div class="form-group row mb-3">
+                            <label class="col-md-2 col-form-label" for="rule">Content</label>
+                            <div class="col-md-9">
+                                {{ form.content }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <div class="col-md-9 offset-md-2">
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary me-3">
+                                    <i class="fa fa-save me-2"></i>
+                                    Published
+                                </button>
+                      
+                                <a href="" class="btn btn-secondary">
+                                    <i class="fa fa-times me-2"></i>
+                                    Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+   
+            </form>
+        </div>
+    </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+            <form enctype="multipart/form-data">
+                <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                    <h4 class="mb-1" id="modalExampleDemoLabel">Add New Blog Catagory</h4>
+                    </div>
+                    <div class="p-4 pb-0">
+                    
+                        <div class="mb-3">
+                            <label class="col-form-label" for="c_name">Category Name:</label>
+                            <!-- <input class="form-control" id="c_name" type="text" /> -->
+                            {{ blog_category_form.name }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-form-label" for="c_description">Category Description:</label>
+                            <!-- <textarea class="form-control" id="c_description"></textarea> -->
+                            {{ blog_category_form.description }}
+                        </div>
+
+                        <div class="col-md-9 mb-3">
+                            <label class="col-form-label" for="">Category Avatar:</label>
+                            <!-- <div class="position-relative d-inline-block" style="width: 200px; height: 50px;">
+                                <label for="c_img">
+                                    <img src="{% static 'assets/img/upload-image2.2.png' %}" alt="" id="show_c_img" class="img-thumbnail" 
+                                    style="width: 100px; height: 100px; border-radius: 5%; border: 1px solid #5e5c5c; border-style: dashed;">
+                                </label>
+                                <span class="remove-image" id="remove_c_img" style="display: none;" onclick="removeImage(this)">&times;</span>
+                            </div> -->
+                            <!-- <input class="form-control show-img" id="c_img" type="file" accept="image/jpeg image/png image/jpg"/> -->
+                            {{ blog_category_form.avatar }}
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer mt-5">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="button" id="addCategoryBtn">Add Catagory </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    $('#addCategoryBtn').click(function () {
+        var csrftoken = $('[name=csrfmiddlewaretoken]').val();
+
+        var formData = new FormData();
+        formData.append('c_name', $('#c_name').val());
+        formData.append('c_description', $('#c_description').val());
+        formData.append('c_img', $('#c_img')[0].files[0]);
+
+        console.log("CSRF =", csrftoken);
+        console.log("Data =", formData);
+
+        // Send AJAX request
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            success: function (data) {
+                $('#error-modal').modal('hide');
+
+                // Update the dropdown with new categories
+                var categoryDropdown = $('#id_category');
+                categoryDropdown.empty();
+
+                $.each(data.categories, function (index, category) {
+                    categoryDropdown.append('<option value="' + category.id + '">' + category.name + '</option>');
+                });
+
+                // Select the newly created category
+                categoryDropdown.val(data.selected);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+});
+</script>
+    
+    
+    
+
+
+<script>
+// function handleImageRemove(input, showImage, defaultImageSrc, removeButton) {
+//     input.value = ''; // Clear the input value to remove the selected file
+//     showImage.src = defaultImageSrc;
+//     removeButton.style.display = 'none'; // Hide the remove button
+// }
+
+// function showRemoveButton(input, showImage, removeButton) {
+//     if (input.files.length > 0) {
+//         removeButton.style.display = 'inline-block';
+//     } else {
+//         removeButton.style.display = 'none';
+//     }
+// }
+
+
+// function setupImageHandling(inputId, showImageId, removeButtonId, defaultImageSrc) {
+//     let inputImage = document.getElementById(inputId);
+//     let showImage = document.getElementById(showImageId);
+//     let removeButton = document.getElementById(removeButtonId);
+
+//     inputImage.onchange = function() {
+//         showImage.src = URL.createObjectURL(inputImage.files[0]);
+//         showRemoveButton(inputImage, showImage, removeButton);
+//     };
+
+//     removeButton.onclick = function() {
+//         handleImageRemove(inputImage, showImage, defaultImageSrc, removeButton);
+//     };
+// }
+
+
+// function removeImage(removeButton) {
+//     // You may want to perform additional actions here, such as clearing the input and hiding the remove button
+//     let inputImage = document.getElementById('c_img');
+//     let showImage = document.getElementById('show_c_img');
+//     let defaultImageSrc = '{% static "assets/img/upload-image2.2.png" %}';
+
+//     inputImage.value = '';
+//     showImage.src = defaultImageSrc;
+//     removeButton.style.display = 'none';
+// }
+
+
+
+setupImageHandling(
+    'c_img',                     
+    'show_c_img', 
+    'remove_c_img', 
+    '{% static "assets/img/upload-image2.2.png" %}'
+);
+
+</script>
+
+
+{% endblock content %}

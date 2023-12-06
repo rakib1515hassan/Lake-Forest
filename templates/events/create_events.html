@@ -12,7 +12,7 @@ Address PMS | Create Property
     <div class="card-header">
         <div class="row flex-between-end">
             <div class="col-auto align-self-center">
-                <h5 class="mb-0" data-anchor="data-anchor">Create Property</h5>
+                <h5 class="mb-0" data-anchor="data-anchor">Create Event</h5>
             </div>
         </div>
     </div>
@@ -21,58 +21,55 @@ Address PMS | Create Property
             
             <form class="row g-3 needs-validation" novalidate="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Owner</label>
-                    {{ form.user }}
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Title</label>
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Title</label>
                     {{ form.title }}
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Size <span>(Square Feet - ft²)</span></label>
-                    {{ form.size }}
-                    {% for error in form.size.errors %}
-                        <div class="invalid-feedback">
-                            {{ error }}
-                        </div>
-                    {% endfor %}
+                    <label class="form-label" for="validationCustom01">Banner Image</label>
+                    {{ form.banner_image }}
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">
-                        Property Price ( <span class="fw-bold fs-1"> ৳</span> )
-                    </label>
-                    {{ form.price }}
-                    {% for error in form.price.errors %}
-                        <div class="invalid-feedback">
-                            {{ error }}
-                        </div>
-                    {% endfor %}
+                    <label class="form-label" for="validationCustom01">Screen Image</label>
+                    {{ form.screen_image }}
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Bed</label>
-                    {{ form.bed }}
+                    <label class="form-label" for="validationCustom01">Analysis Rubric</label>
+                    {{ form.analysis_rubric }}
+                </div>
+
+                <!--  -->
+                <div class="border-dashed-bottom my-2"></div>
+                <!--  -->
+
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Registration Last Date</label>
+                    {{ form.register_team_date }}
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Bath</label>
-                    {{ form.bath }}
+                    <label class="form-label" for="validationCustom01">Select Topic Last Date</label>
+                    {{ form.select_topic_date }}
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Video</label>
-                    {{ form.video }}
+                    <label class="form-label" for="validationCustom01">Final Submition Date</label>
+                    {{ form.final_date }}
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Floor Plans</label>
-                    {{ form.floor_plans }}
+                    <label class="form-label" for="validationCustom01">Faculty Mentor Date</label>
+                    {{ form.faculty_mentor_date }}
                 </div>
 
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Whitepaper Submitin Date</label>
+                    {{ form.submit_whitepaper_date }}
+                </div>
+                
                 <!--  -->
                 <div class="border-dashed-bottom my-2"></div>
                 <!--  -->
