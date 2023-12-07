@@ -129,15 +129,17 @@ class EventForm(forms.ModelForm):
                 'id'   : 'eligibility',  
                 'placeholder': 'Eligibility.'
             }),
+            
+            'entries_header' : Textarea(attrs={   
+                'class': 'form-control', 
+                'id'   : 'entries_header',  
+                'rows' : '4', 
+                'placeholder': 'Entries Header.'
+            }),
             'paper_guidelines' : Textarea(attrs={   
                 'class': 'form-control', 
                 'id'   : 'paper_guidelines',  
                 'placeholder': 'Paper Guidelines.'
-            }),
-            'entries_header' : Textarea(attrs={   
-                'class': 'form-control', 
-                'id'   : 'entries_header',  
-                'placeholder': 'Entries Header.'
             }),
             'presentation' : Textarea(attrs={   
                 'class': 'form-control', 

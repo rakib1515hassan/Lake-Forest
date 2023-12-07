@@ -51,7 +51,7 @@ Address PMS | Create Property
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Select Topic Last Date</label>
+                    <label class="form-label" for="validationCustom01">Topic Selection Last Date</label>
                     {{ form.select_topic_date }}
                 </div>
 
@@ -74,94 +74,44 @@ Address PMS | Create Property
                 <div class="border-dashed-bottom my-2"></div>
                 <!--  -->
              
-                <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Features</label>
-                    {{ form.property_features }}
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Event Info</label>
+                    {{ form.event_info }}
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Purpose</label>
-                    {{ form.property_purpose }}
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Judging Criteria</label>
+                    {{ form.judging_criteria }}
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Type</label>
-                    {{ form.property_type }}
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label" for="sub-type">Property Sub-Type</label>
-                    <!-- <select class="form-select js-choice" id="id_sub_type" size="1" 
-                    name="sub_type" data-options='{"removeItemButton":true,"placeholder":true}'>
-
-                    </select> -->
-                    <select class="form-select" id="id_sub_type" size="1" style="height: 42px;"
-                    name="sub_type" data-options='{"removeItemButton":true,"placeholder":true}'>
-                        <option disabled selected >Select sub type</option>
-                    </select>
-                </div>
-               
-                <!--  -->
-                <div class="border-dashed-bottom my-2"></div>
-                <!--  -->
-
-                <div class="d-block">
-                    <h4 class="">Property Address:</h4>
-                    <div class="col-md-6">
-                        <label class="form-label" for="validationCustom01">City</label>
-                        {{ form.property_address_form.city }}
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label class="form-label" for="validationCustom01">Home Address</label>
-                        {{ form.property_address_form.location }}
-                    </div>
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Eligibility</label>
+                    {{ form.eligibility }}
                 </div>
 
                 <!--  -->
                 <div class="border-dashed-bottom my-2"></div>
                 <!--  -->
 
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01"><h4>Entries Header</h4></label>
+                    {{ form.entries_header }}
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Paper Guidelines</label>
+                    {{ form.paper_guidelines }}
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Presentation</label>
+                    {{ form.presentation }}
+                </div>
                 
-                <div class="d-block">
-                    <h4 class="">Property Descriptsion:</h4>
-                    <div class="col-md-12">
-                        {{ form.description }}
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label" for="validationCustom01">Property Status</label>
-                    {{ form.property_status }}
-                </div>
-
                 <!--  -->
-                <div class="border-dashed-bottom my-2"></div>
+                <!-- <div class="border-dashed-bottom my-2"></div> -->
                 <!--  -->
 
-                <div class="col-md-6">
-                    <h5>Property Image</h5>
-
-                    <!-- Add this image input field inside your form -->
-                    <div class="col-md-12">
-                        <label class="form-label" for="validationCustom01">Property Image</label>
-                        {{ form.property_image_form.image }}
-                    </div>
-
-                    <div>
-                        <label class="form-label mt-3 mb-3 ml-5" for="validationCustom01">Add More Image:</label>
-                        <span class="fs--2 ms-1 text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Who's sub-purpose, do you want to make? Select the parent purpose. If you make parent purpose, do't select this.">
-                            <span class="fas fa-question-circle"></span>
-                        </span>
-                        <button class="btn btn-sm ml-5" id="add_more_image" style="background: rgb(218, 45, 218); color: white;">
-                            Add
-                        </button>
-                    </div>
-                    <!-- Here show the sub type input field -->
-                    <div id="show_item">
-                    </div>
-                </div>
-                   
                 <div class="col-12">
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </div>

@@ -20,8 +20,9 @@ from rest_framework.permissions import (
     )
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework import generics, filters
 from django.db.models import Q
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class ResearchRepositoryRetrieveView(generics.RetrieveAPIView):
@@ -29,6 +30,9 @@ class ResearchRepositoryRetrieveView(generics.RetrieveAPIView):
     permission_classes     = [IsAuthenticated]
     queryset         = ResearchRepository.objects.all()
     serializer_class = ResearchRepositorySerializer
+
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['taproot_causes__title']
 
     def get(self, request, *args, **kwargs):
         instance   = self.get_object()

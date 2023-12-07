@@ -42,7 +42,7 @@ class Event(TimestampedModel):
         super(Event, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+        return self.title[:30]
 
 
 
@@ -53,7 +53,10 @@ class EventPanel(TimestampedModel):
     speaker = models.ManyToManyField(User, related_name="panel_speaker")
     name    = models.CharField(max_length=50)
     title   = models.CharField(max_length=225)
-    Description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.event.title[:20]}, {self.name}"
 
 
 class EventsSchedule(TimestampedModel):
@@ -91,7 +94,7 @@ class EventsTeam(TimestampedModel):
         User, on_delete=models.CASCADE, related_name="team_creator_user"
     )
     member = models.ManyToManyField(
-        User, related_name="team_members", null=True, blank=True
+        User, related_name="team_members"
     )
     mentor = models.ForeignKey(
         User,
