@@ -1,7 +1,7 @@
-from django.urls import path 
+from django.urls import path
 
-from apis.repositorys import views 
+from apis.repositorys import views
 
-urlpatterns = [ 
-    path('research-repository/<int:pk>/', views.ResearchRepositoryRetrieveView.as_view()), 
-] 
+urlpatterns = [
+    path("", views.ResearchRepositoryView.as_view()),
+]

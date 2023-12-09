@@ -4,10 +4,17 @@ from apps.events.models import Event, EventsSchedule, EventsTeam, EventPanel
 from apps.users.models import User
 
 
-class SpeakerSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "name", "profile_img"]
+        fields = ["id", "name", "email", "profile_img", "short_description"]
+
+
+class PanelScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventsSchedule
+        # fields = "__all__"
+        exclude = ["updated_at", "created_at", "speaker", "event"]
 
 
 class EventPanelSerializer(serializers.ModelSerializer):
@@ -17,8 +24,11 @@ class EventPanelSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        print(instance.speaker.all())
-        representation["speaker"] = SpeakerSerializer(
+
+        representation["panel_schedule"] = PanelScheduleSerializer(
+            instance.panel_schedule.filter(panel=instance.id).first()
+        ).data
+        representation["speaker"] = UserSerializer(
             instance.speaker.all(), many=True
         ).data
 
@@ -34,7 +44,7 @@ class EventScheduleSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if instance.speaker:
-            representation["speaker"] = SpeakerSerializer(instance.speaker).data
+            representation["speaker"] = UserSerializer(instance.speaker).data
         if instance.panel:
             representation["panle"] = EventPanelSerializer(instance.panel).data
 
@@ -49,13 +59,13 @@ class EventTeamSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if instance.mentor:
-            representation["mentor"] = SpeakerSerializer(instance.mentor).data
+            representation["mentor"] = UserSerializer(instance.mentor).data
         member_list = []
         for i in instance.member.all():
-            speaker = SpeakerSerializer(i).data
+            speaker = UserSerializer(i).data
             member_list.append(speaker)
         representation["member"] = member_list
-        representation["team_creator"] = SpeakerSerializer(instance.team_creator).data
+        representation["team_creator"] = UserSerializer(instance.team_creator).data
 
         return representation
 
@@ -67,6 +77,7 @@ class EventsSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        request = self.context.get("request")
 
         representation["entries"] = {
             "header_note": representation.pop("entries_header"),
@@ -78,11 +89,13 @@ class EventsSerializer(serializers.ModelSerializer):
         ).data
         sp_list = []
         for i in instance.event_schedules.all():
-            speaker = SpeakerSerializer(i.speaker).data
-            sp_list.append(speaker)
+            if i.speaker:
+                speaker = EventScheduleSerializer(i).data
+                sp_list.append(speaker)
         representation["scheduled_speaker"] = sp_list
 
         representation["Registered"] = User.objects.count()
         representation["mentors"] = User.objects.filter(role="mentor").count()
+        representation["user"] = UserSerializer(request.user).data
 
         return representation
