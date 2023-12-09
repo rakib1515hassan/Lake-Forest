@@ -17,15 +17,20 @@ from rest_framework.permissions import (
     IsAuthenticated,
 )
 from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework import generics, filters
 from django.db.models import Q
 from apps.events.models import Event
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 
 class ResearchRepositoryView(APIView):
     permission_classes = [IsAuthenticated]
     queryset = ResearchRepository.objects.all()
     serializer_class = ResearchRepositorySerializer
+
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['taproot_causes__title']
 
     def get(self, request, *args, **kwargs):
         event = Event.objects.last()

@@ -1,0 +1,243 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+
+{% block title %}
+Address PMS | Create Property
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="row flex-between-end">
+            <div class="col-auto align-self-center">
+                <h5 class="mb-0" data-anchor="data-anchor">Create Event</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <div class="tab-content">
+            
+            <form class="row g-3 needs-validation" novalidate="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Title</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Banner Image</label>
+                    {{ form.banner_image }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Screen Image</label>
+                    {{ form.screen_image }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Analysis Rubric</label>
+                    {{ form.analysis_rubric }}
+                </div>
+
+                <!--  -->
+                <div class="border-dashed-bottom my-2"></div>
+                <!--  -->
+
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Registration Last Date</label>
+                    {{ form.register_team_date }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Topic Selection Last Date</label>
+                    {{ form.select_topic_date }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Final Submition Date</label>
+                    {{ form.final_date }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Faculty Mentor Date</label>
+                    {{ form.faculty_mentor_date }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="validationCustom01">Whitepaper Submitin Date</label>
+                    {{ form.submit_whitepaper_date }}
+                </div>
+                
+                <!--  -->
+                <div class="border-dashed-bottom my-2"></div>
+                <!--  -->
+             
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Event Info</label>
+                    {{ form.event_info }}
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Judging Criteria</label>
+                    {{ form.judging_criteria }}
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Eligibility</label>
+                    {{ form.eligibility }}
+                </div>
+
+                <!--  -->
+                <div class="border-dashed-bottom my-2"></div>
+                <!--  -->
+
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01"><h4>Entries Header</h4></label>
+                    {{ form.entries_header }}
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Paper Guidelines</label>
+                    {{ form.paper_guidelines }}
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label" for="validationCustom01">Presentation</label>
+                    {{ form.presentation }}
+                </div>
+                
+                <!--  -->
+                <!-- <div class="border-dashed-bottom my-2"></div> -->
+                <!--  -->
+
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+
+<script>
+$(document).ready(function() {
+    let counter = 0;
+
+    $("#add_more_image").click(function(e) {
+        e.preventDefault();
+
+        counter++;
+
+        // Clone the image input field and update its name and id
+        const imageField = $("#id_property_image_form-image");
+        const clonedImageField = imageField.clone();
+        clonedImageField.attr("name", `property_image_form-image-${counter}`);
+        clonedImageField.attr("id", `id_property_image_form-image-${counter}`);
+
+        const sub_type_field = `
+        <div class="show_item">
+            <div class="row">
+                <div class="col-md-10">
+                    <label class="form-label" for="validationCustom01">Property Image</label>
+                    ${clonedImageField[0].outerHTML}
+                </div>
+                <div class="col-md-2" style="margin-top: 32px;">
+                    <button class="btn btn-danger btn-sm remove_btn" data-counter="${counter}">
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+        `;
+
+        $("#show_item").prepend(sub_type_field);
+    });
+
+    // Remove the sub type field
+    $("#show_item").on("click", ".remove_btn", function() {
+        $(this).closest(".show_item").remove();
+    });
+
+
+});
+
+</script>
+
+<script>
+
+$(document).ready(function () {
+    var propertyTypeSelect = $('#id_property_type');
+    var subTypeSelect = $('#id_sub_type');
+
+    propertyTypeSelect.on('change', function () {
+        var selectedValue = $(this).val();
+        // console.log('Selected Property Type PK:', selectedValue);
+
+        // Make an AJAX GET request to the API with the selected PK
+        $.ajax({
+            type: 'GET',
+            url : `http://${window.location.host}/apis/property/property-subtypes/${selectedValue}/`,
+            dataType: 'json',
+            success: function (data) {
+                subTypeSelect.empty();
+
+                subTypeSelect.append($('<option>', {
+                    value: '',
+                    text: '------------------',
+                    disabled: true,
+                    selected: true, // You can also add this to make it the default selected option
+                }));
+
+                if (data && data.length > 0) {
+                    data.forEach(function (item) {
+                        console.log("Item ID = %s , Item Name = %s", item.id, item.sub_type);
+                        subTypeSelect.append($('<option>', {
+                            value: item.id,
+                            text: item.sub_type
+                        }));
+                    });
+                } else {
+                    // Handle the case where no data is received
+                    subTypeSelect.append($('<option>', {
+                        value: '',
+                        text: 'No sub-types available'
+                    }));
+                }
+            },
+            error: function (error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    });
+});
+
+
+</script>
+    
+<script>
+    var fieldErrors = {{ field_errors|safe }};
+    
+    $(document).ready(function() {
+  
+      if (fieldErrors.size.length > 0) {
+        $('#size').addClass('is-invalid');
+      }
+  
+      if (fieldErrors.price.length > 0) {
+        $('#price').addClass('is-invalid');
+      }
+    
+    });
+</script>
+
+
+{% endblock content %}

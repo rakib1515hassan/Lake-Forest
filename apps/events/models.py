@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
 User = get_user_model()
 
 from apps.core.models import TimestampedModel, Image
@@ -17,10 +16,10 @@ class Event(TimestampedModel):
     )
 
     register_team_date = models.DateField()
-    select_topic_date = models.DateField()
-    faculty_mentor_date = models.DateField()
+    select_topic_date  = models.DateField()
+    final_date         = models.DateField()
+    faculty_mentor_date    = models.DateField()
     submit_whitepaper_date = models.DateField()
-    final_date = models.DateField()
 
     event_info = models.TextField(blank=True, null=True)
     judging_criteria = models.TextField(blank=True, null=True)
@@ -30,11 +29,21 @@ class Event(TimestampedModel):
     )
 
     paper_guidelines = models.TextField(blank=True, null=True)
-    entries_header = models.TextField(blank=True, null=True)
-    presentation = models.TextField(blank=True, null=True)
+    entries_header   = models.TextField(blank=True, null=True)
+    presentation     = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        # Check if the current event is being set as active
+        if self.is_active:
+            # Deactivate all other events
+            Event.objects.exclude(pk=self.pk).update(is_active=False)
+
+        super(Event, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+        return self.title[:30]
+
 
 
 class EventPanel(TimestampedModel):
@@ -42,9 +51,12 @@ class EventPanel(TimestampedModel):
         Event, on_delete=models.CASCADE, related_name="event_panel"
     )
     speaker = models.ManyToManyField(User, related_name="panel_speaker")
-    name = models.CharField(max_length=50)
-    title = models.CharField(max_length=225)
-    Description = models.TextField(null=True, blank=True)
+    name    = models.CharField(max_length=50)
+    title   = models.CharField(max_length=225)
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.event.title[:20]}, {self.name}"
 
 
 class EventsSchedule(TimestampedModel):
@@ -65,7 +77,7 @@ class EventsSchedule(TimestampedModel):
         null=True,
         blank=True,
     )
-    date = models.DateField()
+    date     = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
     location = models.CharField(max_length=500)
@@ -82,7 +94,7 @@ class EventsTeam(TimestampedModel):
         User, on_delete=models.CASCADE, related_name="team_creator_user"
     )
     member = models.ManyToManyField(
-        User, related_name="team_members", null=True, blank=True
+        User, related_name="team_members"
     )
     mentor = models.ForeignKey(
         User,

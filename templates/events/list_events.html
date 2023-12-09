@@ -130,7 +130,7 @@ Address PMS | Property Featuers
             </div>
             <div class="col-8 col-sm-auto ms-auto text-end ps-0">
                 <div id="orders-actions">
-                    <a href="{% url 'property:property-create' %}" class="btn btn-konnect-default btn-sm" type="button"><span
+                    <a href="" class="btn btn-konnect-default btn-sm" type="button"><span
                             class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span
                             class="d-none d-sm-inline-block ms-1">New</span>
                     </a>
@@ -157,80 +157,38 @@ Address PMS | Property Featuers
             <table width="100%" class="table table-sm table-striped fs--1 mb-0">
                 <tr>
                     <th>No</th>
-                    <th>Seller</th>
                     <th>Title</th>
-                    <th>City</th>
-                    <th>Size</th>
-                    <th>Price</th>
-                    <th>Purpose</th>
-                    <th>Floor Plans</th>
-                    <th>Status</th>
-                    <th>Reference No</th>
-                    <th>Created</th>
+                    <th>Registrations</th>
+                    <th>Topic Selection</th>
+                    <th>Faculty Mentor</th>
+                    <th>Paper Submition</th>
+                    <th>Final Date</th>
                     <th width="200">Actions</th>
                 </tr>
 
-                {% for property in page_obj %}
+                {% for event in page_obj %}
                 <tr>
                     <td class="text-dark fw-bold">{{ page_obj.start_index|add:forloop.counter0 }}</td>
                     <td>
-                        <p>{{ property.user.name }}</p>
-                        <p>{{ property.user }}</p>
-                        <p>{{ property.user.phone }}</p>
+                        <p>{{ event.title }}</p>
+                        <!-- <p>{{ property.user }}</p>
+                        <p>{{ property.user.phone }}</p> -->
                     </td>
-                    <td>
-                        {{ property.title|slice:":40" }}{% if property.title|length > 50 %}...{% endif %}
-                    </td>
-                    <td>{{property.propertyaddress.city}}</td>
-                    <td>
-                        <p style="float: right!important;">
-                            {{property.size}}<span> ft²</span>
-                        </p>
-                    </td>
-                    <td><p style="float: right!important;">{{property.price}}/-</p></td>
-                    <td>
-                        {% if property.property_purpose.parent %}
-                            {{property.property_purpose.purpose_title}} For, {{property.property_purpose.parent}}
-                        {% else %}
-                            {{property.property_purpose.purpose_title}}
-                        {% endif %}
-                    </td>
-                    <td>{% if property.floor_plans %}
-                            <!-- <div class="avatar avatar-4xl">
-                                <img src="" alt="" />
-                            </div> -->
-                            <div class="avatar avatar-4xl">
-                                <a href="{{property.floor_plans.url}}" data-gallery="gallery-2">
-                                    <img class="img-fluid rounded" src="{{property.floor_plans.url}}" alt="" width="300" />
-                                </a>
-                            </div>
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </td>
-                    <td class="fw-bold text-capitalize">
-                        {% if property.property_status == 'pending' %}
-                            <span class="badge rounded-pill bg-warning">{{property.property_status}}</span>
-                        {% elif property.property_status == 'approved' %}
-                            <span class="badge rounded-pill bg-success">{{property.property_status}}</span>
-                        {% elif property.property_status == 'handovers' %}
-                            <span class="badge rounded-pill bg-primary">{{property.property_status}}</span>
-                        {% elif property.property_status == 'refuse' %}
-                            <span class="badge rounded-pill bg-danger">{{property.property_status}}</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ property.reference_no|slice:"-14:" }}</td>
-                    <td>{{property.created_at|date:"d/M/Y"}}</td>
+                    <td>{{ event.register_team_date|date:"d/M/Y" }}</td>
+                    <td>{{ event.select_topic_date|date:"d/M/Y" }}</td>
+                    <td>{{ event.faculty_mentor_date|date:"d/M/Y" }}</td>
+                    <td>{{ event.submit_whitepaper_date|date:"d/M/Y" }}</td>
+                    <td>{{ event.final_date|date:"d/M/Y" }}</td>
 
                     <td>
                         <ul class="action d-flex">
                             <li>
-                                <a class="text-primary" href="{% url 'property:property-detail' property.id %}">
+                                <a class="text-primary" href="{% url 'events:events-details' event.id %}">
                                     <span class="fas fa-eye text-400" data-fa-transform="grow-2"></span>
                                 </a>
                             </li>
                             <li>
-                                <a class="ms-2 text-primary" href="{% url 'property:property-update' property.id %}">
+                                <a class="ms-2 text-primary" href="">
                                     <span class="fas fa-edit text-400" data-fa-transform="grow-2"></span>
                                 </a>
                             </li>
@@ -241,7 +199,7 @@ Address PMS | Property Featuers
                                     <span class="fas fa-trash text-400" data-fa-transform="grow-2"></span>
                                 </a>
                             </li>
-                            {% include 'property/delete.html' %}
+                             <!-- include 'property/delete.html' -->
                             
                         </ul>
                     </td>
