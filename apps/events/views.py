@@ -31,7 +31,7 @@ from apps.events.models import Event, EventPanel, EventsSchedule, EventsTeam
 from apps.events.forms import EventForm
 
 @method_decorator(user_passes_test(is_superuser_or_staff, 
-    login_url='/admin/users/login/?next'), name='dispatch')
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
 class EventListView(ListView, LoginRequiredMixin):
     model = Event
     template_name = 'events/list_events.html'
@@ -68,35 +68,48 @@ class EventListView(ListView, LoginRequiredMixin):
 
 
 @method_decorator(user_passes_test(is_superuser_or_staff, 
-    login_url='/admin/users/login/?next'), name='dispatch')
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
 class EventDetailView(DetailView, LoginRequiredMixin):
     model = Event
     template_name = 'events/details.html'
     context_object_name = 'event'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["location"] = location
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["teams"] = EventsTeam.objects.filter(event = Event.objects.first())[:10]
+        context["panels"] = EventPanel.objects.filter(event = Event.objects.first())[:10]
+        return context
 
 
 @method_decorator(user_passes_test(is_superuser_or_staff, 
-    login_url='/admin/users/login/?next'), name='dispatch')
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
 class EventCreateView(CreateView, LoginRequiredMixin):
     model = Event
     form_class = EventForm
     template_name = 'events/create_events.html'
-    success_url = reverse_lazy('dashboards:home')
+    success_url = reverse_lazy('events:events-list')
 
 
 
+@method_decorator(user_passes_test(is_superuser_or_staff, 
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
+class EventDeleteView(DeleteView):
+    model = Event
+    def post(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+        event.delete()
+        return JsonResponse({'message': 'Deleted successfully'})
 
+        
+
+
+        
 """
         Event Panel
 """
 
 @method_decorator(user_passes_test(is_superuser_or_staff, 
-    login_url='/admin/users/login/?next'), name='dispatch')
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
 class EventPanelsCreateView(View, LoginRequiredMixin):
     def post(self, request, *args, **kwargs):
         event_id = request.POST.get('event') 
@@ -127,15 +140,15 @@ class EventPanelsCreateView(View, LoginRequiredMixin):
 
 
 @method_decorator(user_passes_test(is_superuser_or_staff, 
-    login_url='/admin/users/login/?next'), name='dispatch')
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
 class EventPanelsListView(ListView, LoginRequiredMixin):
     model = EventPanel
-    template_name = 'events/Others/list_panel.html'
+    template_name = 'events/Others/Panel/list_panel.html'
     context_object_name = 'panels'
     obj_per_page = 10
 
     def get_queryset(self):
-        event = Event.objects.filter(is_active = True).first()
+        event = Event.objects.first()
         queryset = EventPanel.objects.filter(event = event)
 
         # search_query = self.request.GET.get('search', '')  
@@ -159,12 +172,24 @@ class EventPanelsListView(ListView, LoginRequiredMixin):
         except EmptyPage:
             raise Http404("Page not found")
     
-        context['event'] = Event.objects.filter(is_active = True).first()
+        context['event'] = Event.objects.first()
         context['speakers'] = User.objects.filter(role = 'mentor')
         context['page_obj'] = page_obj
         context['products_count'] = panels.count()
         return context
     
+
+
+@method_decorator(user_passes_test(is_superuser_or_staff, 
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
+class EventPanelsDeleteView(DeleteView):
+    model = EventPanel
+    def post(self, request, pk):
+        event = get_object_or_404(EventPanel, id=pk)
+        event.delete()
+        return JsonResponse({'message': 'Deleted successfully'})
+    
+
 
 
 
@@ -174,7 +199,7 @@ class EventPanelsListView(ListView, LoginRequiredMixin):
 """
 
 @method_decorator(user_passes_test(is_superuser_or_staff, 
-    login_url='/admin/users/login/?next'), name='dispatch')
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
 class EventsScheduleCreateView(View, LoginRequiredMixin):
     def post(self, request, *args, **kwargs):
         event_id = request.POST.get('event') 
@@ -222,15 +247,15 @@ class EventsScheduleCreateView(View, LoginRequiredMixin):
 
 
 @method_decorator(user_passes_test(is_superuser_or_staff, 
-    login_url='/admin/users/login/?next'), name='dispatch')
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
 class EventsScheduleListView(ListView, LoginRequiredMixin):
     model = EventsSchedule
-    template_name = 'events/Others/list_schedule.html'
+    template_name = 'events/Others/Schedule/list_schedule.html'
     context_object_name = 'schedules'
     obj_per_page = 10
 
     def get_queryset(self):
-        event = Event.objects.filter(is_active = True).first()
+        event = Event.objects.first()
         queryset = EventsSchedule.objects.filter(event = event)
 
         return queryset
@@ -245,9 +270,109 @@ class EventsScheduleListView(ListView, LoginRequiredMixin):
         except EmptyPage:
             raise Http404("Page not found")
     
-        context['event'] = Event.objects.filter(is_active = True).first()
+        context['event'] = Event.objects.first()
         context['panels'] = EventPanel.objects.filter(event = context['event'])
         context['speakers'] = User.objects.filter(role = 'mentor')
         context['page_obj'] = page_obj
         context['products_count'] = schedule.count()
+        return context
+    
+
+
+@method_decorator(user_passes_test(is_superuser_or_staff, 
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
+class EventsScheduleDeleteView(DeleteView):
+    model = EventsSchedule
+    def post(self, request, pk):
+        event = get_object_or_404(EventsSchedule, id=pk)
+        print("------------------")
+        print("event")
+        print("------------------")
+        event.delete()
+        return JsonResponse({'message': 'Deleted successfully'})
+
+
+
+
+    """
+        Events Team
+"""
+
+@method_decorator(user_passes_test(is_superuser_or_staff, 
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
+class EventsTeamCreateView(View, LoginRequiredMixin):
+    def post(self, request, *args, **kwargs):
+        event_id = request.POST.get('event') 
+
+        panel_id = request.POST.get('panel')
+        speaker_id = request.POST.get('speaker')
+
+        date     = request.POST.get('date')
+        s_time   = request.POST.get('s_time')
+        e_time   = request.POST.get('e_time')
+        location = request.POST.get('location')
+
+        print("------------------")
+        print("event_id = ", event_id)
+        print("panel_ids = ", panel_id)
+        print("speaker_ids = ", speaker_id)
+
+        print("date = ", date)
+        print("s_time = ", s_time)
+        print("e_time = ", e_time)
+        print("location = ", location)
+        print("------------------")
+
+        # Create EventPanel instance and save
+        if event_id:
+            events_team = EventsTeam.objects.create(
+                    event_id=event_id,
+                    date   = date,
+                    start_time = s_time,
+                    end_time = e_time,
+                    location = location,
+                )
+            # Get the actual EventPanel and User instances
+            panel_instance   = get_object_or_404(EventPanel, id=panel_id)
+            speaker_instance = get_object_or_404(User, id=speaker_id)
+
+            # Assign the instances to the ForeignKey fields
+            events_team.panel = panel_instance
+            events_team.speaker = speaker_instance
+
+            events_team.save()
+        return redirect('events:events-schedule-list')
+    
+
+
+
+@method_decorator(user_passes_test(is_superuser_or_staff, 
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
+class EventsTeamListView(ListView, LoginRequiredMixin):
+    model = EventsTeam
+    template_name = 'events/Others/Team/list_team.html'
+    context_object_name = 'teams'
+    obj_per_page = 10
+
+    def get_queryset(self):
+        event = Event.objects.first()
+        queryset = EventsTeam.objects.filter(event = event)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        team   = self.get_queryset()
+        paginator   = Paginator(team, self.obj_per_page)
+        page_number = self.request.GET.get('page')
+        try:
+            page_obj = paginator.get_page(page_number)
+        except EmptyPage:
+            raise Http404("Page not found")
+    
+        context['event'] = Event.objects.first()
+        context['members'] = User.objects.filter(role = 'member')
+        context['mentors'] = User.objects.filter(role = 'mentor')
+        context['page_obj'] = page_obj
+        context['products_count'] = team.count()
         return context

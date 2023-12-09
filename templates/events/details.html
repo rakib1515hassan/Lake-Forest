@@ -37,13 +37,14 @@
                 </div>
                 <div class="col-md-auto mt-4 mt-md-0">
                     <button class="btn btn-konnect-primary btn-sm me-2" type="button">
-                        <span class="fas fa-regular fa-hand-pointer me-1"></span>{{total_going}}
+                        <i class="fa-solid fa-people-group me-2"></i>{{teams.count}}
                     </button>
                     <button class="btn btn-konnect-primary btn-sm me-2" type="button">
-                        <span class="fas fa-regular fa-thumbs-up me-1"></span>{{total_interested}}
+                        <i class="fa-solid fa-solar-panel me-2"></i>{{panels.count}}
                     </button>
                     <button class="btn btn-konnect-primary btn-sm me-2" type="button">
-                        <span class="fas fa-regular fa-thumbs-down me-1"></span>{{total_notgoing}}
+                        <i class="fa-regular fa-calendar-days me-2"></i>
+                        {{event.event_schedules.all.count}}
                     </button>
 
                 </div>
@@ -88,7 +89,7 @@
                     <h4 class="mb-3">Entries</h4>
                     <p>{{event.entries_header}}</p>
                 </div>
-                
+
                 <div class="card-body">
                     <h5 class="fs-0 mb-3">Paper Guidelines</h5>
                     <p>{{event.paper_guidelines}}</p>
@@ -106,66 +107,128 @@
             <div class="sticky-sidebar">
                 <!-- Date, Location and Venue -->
                 <div class="card mb-3 fs--1">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Event Date</h5>
+                    </div>
                     <div class="card-body">
-
-                        <h6 class="mt-4">Registration Deadline</h6>
+                        <h6>Registration Last Date</h6>
                         <p class="mb-1">
-                            {{event.register_team_date|date:"D, M j, Y"}}
+                            <span class="badge badge-soft-danger fs--1">
+                                {{event.register_team_date|date:"D, j, M, Y"}}
+                            </span>
                         </p>
 
-                        <h6 class="mt-4">Topic Select Deadline</h6>
+                        <h6 class="mt-4">Topic Selection Last Date</h6>
                         <p class="mb-1">
-                            {{event.select_topic_date|date:"D, M j, Y"}}
+                            <span class="badge badge-soft-info">
+                                {{event.select_topic_date|date:"D, j, M, Y"}}
+                            </span>
                         </p>
 
-                        <h6 class="mt-4">Faculty Mentor Deadline</h6>
+                        <h6 class="mt-4">Faculty Mentor Selection Last Date</h6>
                         <p class="mb-1">
-                            {{event.faculty_mentor_date|date:"D, M j, Y"}}
+                            <span class="badge badge-soft-info">
+                                {{event.faculty_mentor_date|date:"D, j, M, Y"}}
+                            </span>
                         </p>
 
-                        <h6 class="mt-4">Whitepaper Submition Deadline</h6>
+                        <h6 class="mt-4">Whitepaper Submition Last Date</h6>
                         <p class="mb-1">
-                            {{event.submit_whitepaper_date|date:"D, M j, Y"}}
+                            <span class="badge badge-soft-info">
+                                {{event.submit_whitepaper_date|date:"D, j, M, Y"}}
+                            </span>
                         </p>
 
-                        <!-- <h6 class="mt-4">Final Submition Date</h6>
+                        <h6 class="mt-4">Final Competition Date</h6>
                         <p class="mb-1">
-                            {{event.final_date|date:"D, M j, Y"}}
-                        </p> -->
+                            <span class="badge bg-success fs--1">
+                                {{event.final_date|date:"D, j, M, Y"}}
+                            </span>
+                        </p>
                     </div>
                 </div>
 
-
-                <div class="card mb-3 mb-lg-0">
+                <!-- Team's -->
+                <div class="card mb-3 fs--1">
                     <div class="card-header bg-light">
-                        <h5 class="mb-0">Event Participant's</h5>
+                        <h5 class="mb-0">Participant Team's
+                            <span class="float-end fs--1 text-success">
+                                <i class="fa-solid fa-people-group me-2"></i>
+                                {{teams.count}}
+                            </span>
+                        </h5>
                     </div>
                     <div class="card-body fs--1">
 
-                        {% for participant in participants %}
-                        <div class="d-flex btn-reveal-trigger">
-                            <div class="calendar">
-                                <div class="avatar avatar-3xl">
-                                    {% if participant.user.avatar %}
-                                    <img class="rounded-soft" src="{{participant.user.avatar.url}}" alt="" />
-                                    {% else %}
-                                    <img class="rounded-soft" src="{% static 'assets/img/profile_image.jpg' %}"
-                                        alt="" />
-                                    {% endif %}
-                                </div>
+                        {% for team in teams %}
+                        <div class="d-flex mb-3 hover-actions-trigger align-items-center">
+                            <div class="file-thumbnail">
+                                {% if team.image %}
+                                  <a href="{{team.image.url}}" data-gallery="gallery-2">
+                                    <img class="img-fluid rounded" src="{{team.image.url}}" alt="" width="300" />
+                                  </a>
+                                {% else %}
+                                    <img class="border h-100 w-100 fit-cover rounded-2"
+                                    src="{% static 'assets/img/team.png' %}" alt="" />
+                                {% endif %}
                             </div>
-                            <div class="flex-1 position-relative ps-3">
-                                <h6 class="fs-0 mb-0"><a href="">
-                                        {{ participant.user.get_full_name }}</a>
-                                </h6>
-                                <p class="mb-1">Email: <a href="#!" class="text-700">{{ participant.user.email }}</a>
-                                </p>
-                                <p class="text-1000 mb-0">{{ participant.user.phone }}</p>
-                                <div class="border-dashed-bottom my-3"></div>
+                            <div class="ms-3 flex-shrink-1 flex-grow-1">
+                                <h6 class="mb-1"><a class="stretched-link text-900 fw-semi-bold"
+                                        href="#!">{{team.name}}</a></h6>
+                                <div class="fs--1">
+                                    <span class="fw-semi-bold">{{team.team_creator.name}}</span>
+                                    <span class="fw-medium text-600 ms-2">{{team.created_at|timesince}}</span>
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
+                    </div>
 
+                    <div class="card-footer bg-light p-0 border-top">
+                        <a class="btn btn-link d-block w-100" href="">
+                            All Participant
+                            <span class="fas fa-chevron-right ms-1 fs--2"></span>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- Panel's -->
+                <div class="card mb-3 fs--1 mb-lg-0">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Event Panel's
+                            <span class="float-end fs--1 text-success">
+                                <i class="fa-solid fa-solar-panel me-2"></i>
+                                {{panels.count}}
+                            </span>
+                        </h5>
+                        
+                    </div>
+                    <div class="card-body fs--1">
+                        {% for panel in panels %}
+                        <div class="d-flex mb-3 hover-actions-trigger align-items-center">
+                            <div class="bg-soft-primary px-3 py-3 rounded-circle text-center" style="width:60px;height:60px;">
+                                <h5 class="text-primary mb-0 d-flex flex-column mt-n1">
+                                    <span>{{panel.created_at|date:"j"}} </span>
+                                    <small class="text-primary fs--2 lh-1">{{ panel.created_at|date:"M"|upper }}</small>
+                                </h5>
+                            </div>
+                            <div class="ms-3 flex-shrink-1 flex-grow-1">
+                                <h6 class="mb-1">
+                                    <a class="stretched-link text-900 fw-semi-bold"
+                                        href="#!">{{panel.name}}
+                                    </a>
+                                </h6>
+                                <!-- <h6 class="mb-1">
+                                </h6> -->
+                                <div class="fs--1">
+                                    <span class="fw-semi-bold">{{panel.title|slice:":100"}}</span>
+                                    <!-- <span class="fw-medium text-600">{{panel.created_at|timesince}}</span> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-dashed-bottom my-2"></div>
+                        {% endfor %}
                     </div>
 
                     <div class="card-footer bg-light p-0 border-top">

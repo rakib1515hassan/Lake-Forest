@@ -1,14 +1,16 @@
 {% extends 'layouts/master.html' %}
 
+{% load static %}
 
 {% block title %}
-Address PMS | Property Featuers
+LakeForest | Event Schedule List
 {% endblock title %}
 
 
 
 
 {% block styles %}
+
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <style>
     .action li {
@@ -71,26 +73,35 @@ Address PMS | Property Featuers
             <table width="100%" class="table table-sm table-striped fs--1 mb-0">
                 <tr>
                     <th>No</th>
-                    <th>Name</th>
-                    <th>Title</th>
-                    <th>Event</th>
+                    <th>Date</th>
                     <th>Speaker</th>
+                    <th>Event</th>
+                    <th>Panel</th>
+                    <th>Starting</th>
+                    <th>Ending</th>
+                    <th>Loaction</th>
                     <th width="200">Actions</th>
                 </tr>
 
-                {% for panel in page_obj %}
+                {% for schedule in page_obj %}
                 <tr>
                     <td class="text-dark fw-bold">{{ page_obj.start_index|add:forloop.counter0 }}</td>
-                    <td>{{ panel.name }}</td>
-                    <td>{{ panel.title|slice:":40" }}</td>
-                    <td>{{ panel.event.title|slice:":40" }}</td>
-                    <td>
-                        {% for spk in panel.speaker.all %}
+                    <td>{{ schedule.date }}</td>
+                    <td></td>
+                    <td>{{ schedule.event.title|slice:":40" }}</td>
+                    <td>{{ schedule.panel.name|slice:":40" }}</td>
+
+                    <td>{{ schedule.start_time }}</td>
+                    <td>{{ schedule.end_time }}</td>
+
+                    <td>{{ schedule.location }}</td>
+                    <!-- <td>
+                        {% for spk in schedule.speaker.all %}
                         <p><span class="badge bg-light text-dark fs--1">
                                 <span class="fas fa-solid fa-user-tie me-1"></span>{{ spk.name }}
                             </span></p>
                         {% endfor %}
-                    </td>
+                    </td> -->
 
 
                     <td>
@@ -107,8 +118,7 @@ Address PMS | Property Featuers
                             </li>
 
                             <li>
-                                <a class="ms-2 text-danger" href="" data-bs-toggle="modal"
-                                    data-bs-target="#deleteProperty{{property.id}}">
+                                <a class="ms-2 text-danger event-delete-button" data-id="{{ schedule.id }}">
                                     <span class="fas fa-trash text-400" data-fa-transform="grow-2"></span>
                                 </a>
                             </li>
@@ -158,11 +168,11 @@ Address PMS | Property Featuers
 
 
         {% for i in page_obj.paginator.page_range %}
-        {% if page_obj.number == i %}
-        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
-        {% else %}
-        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-        {% endif %}
+            {% if page_obj.number == i %}
+                <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
         {% endfor %}
 
 
@@ -189,7 +199,7 @@ Address PMS | Property Featuers
 <div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
         <div class="modal-content position-relative">
-            <form action="{% url 'events:events-panel-create' %}" method="POST">
+            <form action="{% url 'events:events-schedule-create' %}" method="POST">
                 {% csrf_token %}
                 <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
                     <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
@@ -203,37 +213,61 @@ Address PMS | Property Featuers
                         <div class="mb-3">
                             <label class="col-form-label" for="organizerSingle">Event*</label>
                             <input type="hidden" name="event" value="{{ event.id }}">
-                            <select class="form-select js-choice" id="organizerSingle" size="1" 
-                                name="event" disabled
+                            <select class="form-select js-choice" id="organizerSingle" size="1" name="event" disabled
                                 data-options='{"removeItemButton":true,"placeholder":true}'>
                                 <option value="{{event.id}}">{{event.title|slice:":30"}}...</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label class="col-form-label" for="organizerMultiple">Speakers*</label>
-                            <select class="form-select js-choice" id="organizerMultiple" multiple="multiple" size="1" name="speaker" 
-                            data-options='{"removeItemButton":true,"placeholder":true}' required>
+                            <label class="col-form-label" for="organizerMultiple">Panel</label>
+                            <select class="form-select js-choice" id="organizerSingle" size="1" name="panel" data-options='{"removeItemButton":true,"placeholder":true}'>
                                 <option value="">Select organizer...</option>
-                                {% for spk in speakers %}
-                                <option value="{{ spk.id }}">{{ spk.name }}</option>
+                                {% for panel in panels %}
+                                    <option value="{{ panel.id }}">{{ panel.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label class="col-form-label" for="name">Name*</label>
-                            <input type="text" class="form-control" id="name" name="name" required></input>
+                            <label class="col-form-label" for="organizerMultiple">Speakers</label>
+                            <select class="form-select js-choice" id="organizerSingle" size="1" name="speaker" data-options='{"removeItemButton":true,"placeholder":true}'>
+                                <option value="">Select organizer...</option>
+                                {% for spk in speakers %}
+                                <option value="{{ spk.id }}">   
+                                    {% if spk.profile_img %}
+                                        <img src="" alt="">
+                                    {% else %}
+                                        <div class="col-auto">
+                                            <div class="avatar avatar-l">
+                                            <img class="rounded-circle" src="{% static 'assets/img/profile_image.jpg' %}" alt="" />
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {{ spk.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="mb-3">
-                            <label class="col-form-label" for="title">Title*</label>
-                            <input type="text" class="form-control" id="title" name="title" required></input>
+                            <label class="col-form-label" for="date">Date*</label>
+                            <input type="date" class="form-control" id="date" name="date" required></input>
                         </div>
 
                         <div class="mb-3">
-                            <label class="col-form-label" for="description">Description</label>
-                            <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+                            <label class="col-form-label" for="s_time">Starting*</label>
+                            <input type="time" class="form-control" id="s_time" name="s_time" required></input>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="col-form-label" for="e_time">Ending*</label>
+                            <input type="time" class="form-control" id="e_time" name="e_time" required></input>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="col-form-label" for="location">Location</label>
+                            <textarea class="form-control" id="location" rows="3" name="location"></textarea>
                         </div>
                     </div>
                 </div>
@@ -246,8 +280,50 @@ Address PMS | Property Featuers
     </div>
 </div>
 
+
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".event-delete-button").click(function (e) {
+            e.preventDefault();
+            const scheduleId = $(this).data("id");
+            const deleteUrl = "{% url 'events:events-schedule-delete' 0 %}".replace('0', scheduleId);
+
+            console.log("Deleting event =", scheduleId, deleteUrl);
+
+            Swal.fire({
+                title: "Do you want delete this schedule?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Perform AJAX request to delete the event
+                    $.ajax({
+                        type: "POST",
+                        url: deleteUrl,
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        success: function () {
+                            Swal.fire("Event deleted!", "", "success").then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function () {
+                            Swal.fire("Error deleting event", "", "error");
+                        },
+                    });
+
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+
+        });
+    });
+</script>
 {% endblock content %}
-
-
-
-

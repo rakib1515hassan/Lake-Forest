@@ -143,11 +143,11 @@
 
                 <!-- Schedule List -->
                 <li class="nav-item">
-                    <a class="nav-link {% active_menu request 'events:events-panel-list' %}" 
+                    <a class="nav-link {% active_menu request 'events:events-schedule-list' %}" 
                     href="{% url 'events:events-schedule-list' %}">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
-                                <span class="fas fa-solid fa-user-tie"></span>
+                                <span class="fas fa-solid fa-hourglass-start"></span>
                             </span>
                             <span class="nav-link-text ps-1">Schedule List</span>
                         </div>
@@ -157,7 +157,8 @@
 
                 <!-- Team List -->
                 <li class="nav-item">
-                    <a class="nav-link " href="">
+                    <a class="nav-link {% active_menu request 'events:events-team-list' %}" 
+                    href="{% url 'events:events-team-list' %}">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <span class="fas fa-user-friends"></span>

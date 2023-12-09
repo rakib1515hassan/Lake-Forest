@@ -84,6 +84,9 @@ class EventsSchedule(TimestampedModel):
 
     def __str__(self):
         return f"{self.event.title}"
+    
+    class Meta:
+        ordering = ['-created_at']
 
 
 class EventsTeam(TimestampedModel):

@@ -94,7 +94,7 @@ Address PMS | Create Property
                 <!--  -->
 
                 <div class="col-md-8">
-                    <label class="form-label" for="validationCustom01"><h4>Entries Header</h4></label>
+                    <label class="form-label" for="validationCustom01"><h4>Entries</h4></label>
                     {{ form.entries_header }}
                 </div>
 
@@ -113,8 +113,17 @@ Address PMS | Create Property
                 <!--  -->
 
                 <div class="col-12">
-                    <button class="btn btn-primary" type="submit">Submit</button>
+                    <button type="submit" class="btn btn-primary me-3">
+                        <i class="fa fa-save me-2"></i>
+                        Create
+                    </button>
+
+                    <a href="{% url 'events:events-list' %}" class="btn btn-secondary">
+                        <i class="fa fa-times me-2"></i>
+                        Cancel
+                    </a>
                 </div>
+
             </form>
 
         </div>
