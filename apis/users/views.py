@@ -42,7 +42,7 @@ from apis.users.Serializers.ChangeEmailandPhoneSerializer import (
     Phone_Change_OTPVerificationSerializer,
 )
 
-from apis.users.Serializers.ProfileSerializer import CustomerSerializer
+from apis.users.Serializers.ProfileSerializer import UserSerializer
 from apis.users.Serializers.LoginSerializer import UserLoginSerializer
 
 from apis.users.Serializers.ChangePasswordSerializer import UserChangePasswordSerializer
@@ -271,18 +271,24 @@ class UserLogoutView(APIView):
 """
 
 
-class CustomerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+class UserProfileView(APIView):
     authentication_classes = [JWTAuthentication]
-    # authentication_classes = [CustomJWTAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = CustomerSerializer
+    serializer_class = UserSerializer
     queryset = User.objects.all()
 
     def get(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        msg = "User retrieved successfully!"
-        return api_success(serializer.data, status=200, message=msg)
+        current_user = request.user
+        if user_id := self.request.query_params.get("user_id"):
+            user = self.queryset.get(id=user_id)
+            serializer = self.serializer_class(user, context={"role": user.role})
+        else:
+            serializer = self.serializer_class(
+                current_user, context={"role": current_user.role}
+            )
+        return api_success(
+            serializer.data, status=200, message="The user profile is successful"
+        )
 
     def update(self, request, *args, **kwargs):
         fields_to_check = [

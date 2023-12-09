@@ -26,7 +26,9 @@ class EventView(APIView):
         event = self.queryset.last()
         if not event:
             return api_error({}, status=200, message="Event Doesn't Exist")
-        event_serializer = self.serializer_class(event)
+        event_serializer = self.serializer_class(
+            event, context={"request": self.request}
+        )
         return api_success(event_serializer.data, status=200, message="Event Data")
 
 
@@ -49,9 +51,8 @@ class EventScheduleView(APIView):
             "select_topic_date": event.select_topic_date,
             "register_team_date": event.register_team_date,
         }
-        data.append(deadlines)
-
-        return api_success(data, status=200, message="Event Schedule Data")
+        result = {"event_schedule": data, "event_deadlines": deadlines}
+        return api_success(result, status=200, message="Event Schedule Data")
 
 
 class EventTeamView(APIView):
