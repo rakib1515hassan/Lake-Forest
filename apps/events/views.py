@@ -28,7 +28,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.urls import reverse_lazy, reverse
 from apps.events.models import Event, EventPanel, EventsSchedule, EventsTeam
-from apps.events.forms import EventForm
+from apps.events.forms import EventForm, EventPanelForm
 
 @method_decorator(user_passes_test(is_superuser_or_staff, 
     login_url=reverse_lazy('dashboards:login')), name='dispatch')
@@ -100,10 +100,18 @@ class EventDeleteView(DeleteView):
         event.delete()
         return JsonResponse({'message': 'Deleted successfully'})
 
-        
+
+
+class EventUpdateView(LoginRequiredMixin, UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'events/update.html'
+    success_url = reverse_lazy('events:events-list')
 
 
         
+
+
 """
         Event Panel
 """
@@ -191,7 +199,53 @@ class EventPanelsDeleteView(DeleteView):
     
 
 
+@method_decorator(user_passes_test(is_superuser_or_staff, 
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
+class EventPanelsUpdateView(LoginRequiredMixin, UpdateView):
+    model = EventPanel
+    form_class = EventPanelForm
+    template_name = 'events/Others/Panel/update.html'
+    success_url = reverse_lazy('events:events-panel-list')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event'] = Event.objects.first()
+        return context
+
+    def form_valid(self, form):
+        event = Event.objects.first()
+        form.instance.event = event
+        form.save()
+        return super().form_valid(form)
+
+    # def form_invalid(self, form):
+    #     field_errors = {field.name: field.errors for field in form}
+    #     has_errors = any(field_errors.values())
+
+    #     print("------------------")
+    #     print("Error =", field_errors)
+    #     print("------------------")
+
+    #     return self.render_to_response(self.get_context_data(
+    #         form=form, 
+    #         field_errors=field_errors, 
+    #         has_errors=has_errors
+    #         ))
+
+
+
+@method_decorator(user_passes_test(is_superuser_or_staff, 
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
+class EventPanelsDetailView(DetailView, LoginRequiredMixin):
+    model = EventPanel
+    template_name = 'events/Others/Panel/details.html'
+    context_object_name = 'panel'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event'] = Event.objects.first()
+        return context
+    
 
 
 """
@@ -233,12 +287,18 @@ class EventsScheduleCreateView(View, LoginRequiredMixin):
                     location = location,
                 )
             # Get the actual EventPanel and User instances
-            panel_instance = get_object_or_404(EventPanel, id=panel_id)
-            speaker_instance = get_object_or_404(User, id=speaker_id)
+            if panel_id:
+                panel_instance = get_object_or_404(EventPanel, id=panel_id)
+                if panel_instance is not None:
+                    event_schedule.panel = panel_instance
+            
+            if speaker_id:
+                speaker_instance = get_object_or_404(User, id=speaker_id)
+                if speaker_instance is not None:
+                    event_schedule.speaker = speaker_instance
 
-            # Assign the instances to the ForeignKey fields
-            event_schedule.panel = panel_instance
-            event_schedule.speaker = speaker_instance
+            
+            
 
             event_schedule.save()
         return redirect('events:events-schedule-list')
@@ -290,6 +350,22 @@ class EventsScheduleDeleteView(DeleteView):
         print("------------------")
         event.delete()
         return JsonResponse({'message': 'Deleted successfully'})
+
+
+
+
+@method_decorator(user_passes_test(is_superuser_or_staff, 
+    login_url=reverse_lazy('dashboards:login')), name='dispatch')
+class EventsScheduleDetailView(DetailView, LoginRequiredMixin):
+    model = EventsSchedule
+    template_name = 'events/Others/Schedule/details.html'
+    context_object_name = 'schedule'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event'] = Event.objects.first()
+        return context
+    
 
 
 

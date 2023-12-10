@@ -101,12 +101,12 @@ LakeForest | Event Panel List
                     <td>
                         <ul class="action d-flex">
                             <li>
-                                <a class="text-primary" href="">
+                                <a class="text-primary" href="{% url 'events:events-panel-details' panel.id %}">
                                     <span class="fas fa-eye text-400" data-fa-transform="grow-2"></span>
                                 </a>
                             </li>
                             <li>
-                                <a class="ms-2 text-primary" href="">
+                                <a class="ms-2 text-primary" href="{% url 'events:events-panel-update' panel.id %}">
                                     <span class="fas fa-edit text-400" data-fa-transform="grow-2"></span>
                                 </a>
                             </li>
@@ -189,7 +189,7 @@ LakeForest | Event Panel List
 </nav>
 
 
-<!-- Modal -->
+<!-- Create Panel Modal-->
 <div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
         <div class="modal-content position-relative">
@@ -249,6 +249,8 @@ LakeForest | Event Panel List
         </div>
     </div>
 </div>
+
+
 
 
 <!-- jQuery -->

@@ -149,3 +149,47 @@ class EventForm(forms.ModelForm):
             
 
         }
+
+
+
+
+class EventPanelForm(forms.ModelForm):
+
+    class Meta:
+        model = EventPanel
+        fields = ['speaker', 'name', 'title', 'description']
+
+        widgets = {
+            'speaker': SelectMultiple(attrs={
+                'class'   : 'form-select js-choice', 
+                'id'      : 'speaker',
+                'multiple': "multiple",
+                'size'    : "1",
+                'data-options' : '{"removeItemButton":true,"placeholder":true}',
+                }),
+
+            'name': TextInput(attrs={
+                'class': 'form-control',
+                'id'   : 'name',
+                'placeholder': 'Write event panel name'
+            }),
+
+            'title' : Textarea(attrs={   
+                'class': 'form-control', 
+                'id'   : 'title',
+                'rows' : '4',  
+                'placeholder': 'Write event panel title'
+            }),
+
+            'description' : Textarea(attrs={   
+                'class': 'form-control', 
+                'id'   : 'description',  
+                'placeholder': 'Write event panel description.'
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Query users with role='mentor' and set them as initial choices for the 'speaker' field
+        self.fields['speaker'].queryset = User.objects.filter(role='mentor')

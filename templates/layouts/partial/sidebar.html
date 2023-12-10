@@ -84,7 +84,7 @@
 
                 <!-- Event -->
                 <li class="nav-item">
-                    <a class="nav-link dropdown-indicator {% active_menu request 'events:events-list, events:events-details, events:events-create' %}"
+                    <a class="nav-link dropdown-indicator {% active_menu request 'events:events-list, events:events-details, events:events-create, events:event-update' %}"
 
                        href="#events" role="button" data-bs-toggle="collapse"
                        aria-expanded="false" aria-controls="events">
@@ -130,7 +130,7 @@
 
                 <!-- Panels List -->
                 <li class="nav-item">
-                    <a class="nav-link {% active_menu request 'events:events-panel-list' %}" 
+                    <a class="nav-link {% active_menu request 'events:events-panel-list, events:events-panel-update, events:events-panel-details' %}" 
                     href="{% url 'events:events-panel-list' %}">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
@@ -143,7 +143,7 @@
 
                 <!-- Schedule List -->
                 <li class="nav-item">
-                    <a class="nav-link {% active_menu request 'events:events-schedule-list' %}" 
+                    <a class="nav-link {% active_menu request 'events:events-schedule-list, events:events-schedule-details' %}" 
                     href="{% url 'events:events-schedule-list' %}">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">

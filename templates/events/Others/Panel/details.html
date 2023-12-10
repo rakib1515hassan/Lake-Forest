@@ -1,0 +1,145 @@
+{% extends 'layouts/master.html' %}
+
+{% load static %}
+
+{% block title %}
+Event Panel Details
+{% endblock title %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <form class="card mb-3" method="post" enctype="multipart/form-data">
+            <div class="card-header">
+                <div class="row flex-between-end">
+                    <div class="col-auto align-self-center">
+                        <h5 class="mb-0" data-anchor="data-anchor">
+                            <i class="fas fa-users"></i>
+                            Event Panel Details
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body bg-light">
+                {% csrf_token %}
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label" for="rule">Event</label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" value="{{ event }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label" for="rule">Name</label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" value="{{ panel.name }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label" for="rule">Title</label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" value="{{ panel.title }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label" for="rule">Description</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" cols="30" rows="10" disabled readonly>{{panel.description}}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label" for="rule">Speaker</label>
+                        <div class="col-md-9">
+                            <div class="col">
+                                <div class="card h-lg-100 overflow-hidden">
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive scrollbar">
+                                            <table class="table table-dashboard mb-0 table-borderless fs--1 border-200">
+                                                <thead class="bg-light">
+                                                    <tr class="text-900">
+                                                        <th>No</th>
+                                                        <th class="text-center">Profile</th>
+                                                        <th class="text-center">Organization</th>
+                                                        <th class="text-end">Designation</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for spk in panel.speaker.all %}
+                                                    <tr class="border-bottom border-200">
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td>
+                                                            <div class="d-flex align-items-center position-relative">
+                                                                {% if spk.profile_img %}
+                                                                <img class="rounded-1 border border-200"
+                                                                    src="{{spk.profile_img.url}}" width="60"
+                                                                    alt="" />
+                                                                {% else %}
+                                                                <img class="rounded-1 border border-200"
+                                                                    src="{% static 'assets/img/profile_image.jpg' %}" width="60"
+                                                                    alt="" />
+                                                                {% endif %}
+                                                                <div class="flex-1 ms-3">
+                                                                    <h6 class="mb-1 fw-semi-bold text-nowrap"><a
+                                                                            class="text-900 stretched-link"
+                                                                            href="#!">{{spk.name}}</a></h6>
+                                                                    <p class="fw-semi-bold mb-0 text-500">{{spk.email}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        {% with last_occupation=spk.user_occupation.first %}
+                                                            <td class="align-middle text-center fw-semi-bold">
+                                                                {{ last_occupation.organization }}
+                                                            </td>
+                                                            <td class="align-middle text-center fw-semi-bold">
+                                                                {{ last_occupation.designation }}
+                                                            </td>
+                                                        {% endwith %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-light py-2">
+                                        <div class="row flex-between-center">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <div class="col-md-9 offset-md-2 card-footer">
+                    <button type="submit" class="btn btn-primary ms-2 me-2">
+                        <i class="fas fa-save"></i>
+                        Update
+                    </button>
+                    <a href="{% url 'events:events-panel-list' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

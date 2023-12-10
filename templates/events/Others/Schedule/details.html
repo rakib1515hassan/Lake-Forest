@@ -1,0 +1,160 @@
+{% extends 'layouts/master.html' %}
+
+{% load static %}
+
+{% block title %}
+Event Schedule Details
+{% endblock title %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <form class="card mb-3" method="post" enctype="multipart/form-data">
+            <div class="card-header">
+                <div class="row flex-between-end">
+                    <div class="col-auto align-self-center">
+                        <h5 class="mb-0" data-anchor="data-anchor">
+                            <i class="fas fa-users"></i>
+                            Event Schedule Details
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body bg-light">
+                {% csrf_token %}
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Event</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" value="{{ event }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Starting Time</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" value="{{ schedule.date }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Starting Time</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" value="{{ schedule.start_time }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Ending Time</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" value="{{ schedule.end_time }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Location</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" value="{{ schedule.location }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                {% if schedule.panel is not Null %}
+                    <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Panel</label>
+                        <div class="col-md-8">
+                            <div class="col">
+                                <div class="card h-lg-100 overflow-hidden">
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive scrollbar">
+                                            <table class="table table-bordered table-striped"> 
+                                                <thead class="badge-soft-primary">
+                                                    <tr>
+                                                        <th>Attribute</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="fw-semi-bold">Name</td>
+                                                        <td>{{schedule.panel.name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="fw-semi-bold">Speakers</td>
+                                                        <td>
+                                                        {% for spk in schedule.panel.speaker.all %}
+                                                        <div class="d-flex align-items-center position-relative mb-3">
+                                                            <div class="avatar avatar-2xl">
+                                                                {% if spk.profile_img %}
+                                                                <img class="rounded-circle" src="{{spk.profile_img.url}}" alt="" />
+                                                                {% else %}
+                                                                <img class="rounded-circle" src="{% static 'assets/img/profile_image.jpg' %}" alt="" />
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="flex-1 ms-3">
+                                                              <h6 class="mb-0 fw-semi-bold">
+                                                                <a class="stretched-link text-900" 
+                                                                   href="#">
+                                                                   {{spk.name}}
+                                                                </a>
+                                                            </h6>
+                                                              <p class="text-500 fs--2 mb-0">{{spk.email}}</p>
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                {% else %}
+                    <div class="show_item">
+                        <div class="form-group row mb-3">
+                            <label class="col-md-3 col-form-label" for="rule">Speaker</label>
+                            <div class="col-md-8 d-flex align-items-center position-relative">
+                                {% if schedule.speaker.profile_img %}
+                                <img class="rounded-1 border border-200"
+                                    src="{{schedule.speaker.profile_img.url}}" width="60"
+                                    alt="" />
+                                {% else %}
+                                <img class="rounded-1 border border-200"
+                                    src="{% static 'assets/img/profile_image.jpg' %}" width="60"
+                                    alt="" />
+                                {% endif %}
+                                <div class="flex-1 ms-3">
+                                    <h6 class="mb-1 fw-semi-bold text-nowrap"><a
+                                            class="text-900 stretched-link"
+                                            href="#!">{{ schedule.speaker.name }}</a></h6>
+                                    <p class="fw-semi-bold mb-0 text-500">{{schedule.speaker.email}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

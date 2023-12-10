@@ -38,6 +38,9 @@ class User(AbstractBaseUser, TimestampedModel, PermissionsMixin):
 
     profile_img    = models.ImageField(upload_to="ProfileImage/", null=True, blank=True)
 
+    ## Address
+    address = models.CharField(max_length=500, null=True, blank=True)
+
     ## User Permission and Roll
     is_active   = models.BooleanField(default = True)
     is_admin    = models.BooleanField(default = False)
@@ -51,7 +54,10 @@ class User(AbstractBaseUser, TimestampedModel, PermissionsMixin):
 
     short_description = models.TextField(null= True, blank= True)
     description       = models.TextField(null= True, blank= True)
-
+    courses_taught    = models.CharField(max_length=500, null=True, blank=True)
+    research_papers   = models.CharField(max_length=500, null=True, blank=True) 
+    interest          = models.TextField(null=True, blank=True)
+    
     objects = UserManager()
 
     USERNAME_FIELD = "email"
@@ -62,22 +68,30 @@ class User(AbstractBaseUser, TimestampedModel, PermissionsMixin):
         return self.email
     
     def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        # return True      ## Default
         return self.is_admin
 
     def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        # return True      ## Default
         return self.is_admin
 
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
         return self.is_admin
+    
+    @property
+    def first_name(self):
+        if self.name:
+            parts = self.name.rsplit(' ', 1)
+            return parts[0]
+
+    @property
+    def last_name(self):
+        if self.name:
+            parts = self.name.rsplit(' ', 1)
+            return parts[1] if len(parts) > 1 else ''
+
+    @property
+    def get_full_name(self):
+        return self.name
 
     class Meta:
         verbose_name = 'User'
@@ -137,6 +151,8 @@ class Academic(TimestampedModel):
     institute  = models.CharField(max_length=225, null=True, blank=True)
     department = models.CharField(max_length=225, null=True, blank=True)
     session    = models.CharField(max_length=225, null=True, blank=True)
+    major      = models.CharField(max_length=225, null=True, blank=True)
+    graduation_year = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.name}, {self.roll}" 
