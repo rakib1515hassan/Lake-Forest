@@ -73,10 +73,12 @@ LakeForest | Event Schedule List
             <table width="100%" class="table table-sm table-striped fs--1 mb-0">
                 <tr>
                     <th>No</th>
+                    <th>
+                        <span class="fs--1 text-info">Panel</span>/
+                        <span class="fs--1 text-success">Speaker</span>
+                    </th>
+                    <!-- <th>Event</th> -->
                     <th>Date</th>
-                    <th>Speaker</th>
-                    <th>Event</th>
-                    <th>Panel</th>
                     <th>Starting</th>
                     <th>Ending</th>
                     <th>Loaction</th>
@@ -86,13 +88,17 @@ LakeForest | Event Schedule List
                 {% for schedule in page_obj %}
                 <tr>
                     <td class="text-dark fw-bold">{{ page_obj.start_index|add:forloop.counter0 }}</td>
-                    <td>{{ schedule.date }}</td>
-                    <td></td>
-                    <td>{{ schedule.event.title|slice:":40" }}</td>
-                    <td>{{ schedule.panel.name|slice:":40" }}</td>
-
-                    <td>{{ schedule.start_time }}</td>
-                    <td>{{ schedule.end_time }}</td>
+                    <td>
+                        {% if schedule.panel is not Null %}
+                            <span class="badge badge-soft-info fs--1">{{ schedule.panel.name|slice:":40" }}</span>
+                        {% else %}
+                            <span class="badge badge-soft-success fs--1">{{schedule.speaker.name}}</span>
+                        {% endif %}
+                    </td>
+                    <!-- <td>{{ schedule.event.title|slice:":40" }}</td> -->
+                    <td>{{ schedule.date|date:"d/ M/ Y" }}</td>
+                    <td>{{ schedule.start_time|time:"h:i A" }}</td>
+                    <td>{{ schedule.end_time|time:"h:i A" }}</td>
 
                     <td>{{ schedule.location }}</td>
                     <!-- <td>
@@ -219,20 +225,32 @@ LakeForest | Event Schedule List
                             </select>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mt-3 d-flex">
+                            <div class="form-check me-3">
+                                <input class="form-check-input" id="panel_button" type="radio" name="flexRadioDefault" checked="" />
+                                <label class="form-check-label" for="panel_button">Panel</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="speaker_button" type="radio" name="flexRadioDefault" />
+                                <label class="form-check-label" for="speaker_button">Speaker</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3" id="panel_show">
                             <label class="col-form-label" for="organizerMultiple">Panel</label>
+
                             <select class="form-select js-choice" id="organizerSingle" size="1" name="panel" data-options='{"removeItemButton":true,"placeholder":true}'>
-                                <option value="">Select organizer...</option>
+                                <option value="">Select panel...</option>
                                 {% for panel in panels %}
                                     <option value="{{ panel.id }}">{{ panel.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="col-form-label" for="organizerMultiple">Speakers</label>
+                        <div class="mb-3" id="speaker_show">
+                            <label class="col-form-label" for="organizerMultiple">Speaker</label>
                             <select class="form-select js-choice" id="organizerSingle" size="1" name="speaker" data-options='{"removeItemButton":true,"placeholder":true}'>
-                                <option value="">Select organizer...</option>
+                                <option value="">Select speaker...</option>
                                 {% for spk in speakers %}
                                 <option value="{{ spk.id }}">   
                                     {% if spk.profile_img %}
@@ -285,6 +303,7 @@ LakeForest | Event Schedule List
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+<!-- For Delete -->
 <script>
     $(document).ready(function () {
         $(".event-delete-button").click(function (e) {
@@ -326,4 +345,32 @@ LakeForest | Event Schedule List
         });
     });
 </script>
+
+
+<!-- For showing Panel or Speaker -->
+<script>
+    $(document).ready(function() {
+        // Initial check for the default selected radio button
+        showHideDivs();
+    
+        // Handle radio button change event
+        $('input[name="flexRadioDefault"]').change(function() {
+            showHideDivs();
+        });
+    
+        function showHideDivs() {
+            // Check which radio button is selected
+            if ($('#panel_button').prop('checked')) {
+                // If Panel button is selected, show panel_show and hide speaker_show
+                $('#panel_show').show();
+                $('#speaker_show').hide();
+            } else {
+                // If Speaker button is selected, show speaker_show and hide panel_show
+                $('#speaker_show').show();
+                $('#panel_show').hide();
+            }
+        }
+    });
+    </script>
+    
 {% endblock content %}

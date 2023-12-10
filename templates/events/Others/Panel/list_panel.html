@@ -71,8 +71,9 @@ LakeForest | Event Panel List
             <table width="100%" class="table table-sm table-striped fs--1 mb-0">
                 <tr>
                     <th>No</th>
-                    <th>Panel</th>
-                    <th>Event</th>
+                    <th>Panel Name</th>
+                    <th>Panel Title</th>
+                    <!-- <th>Event</th> -->
                     <th>Speaker</th>
                     <th width="200">Actions</th>
                 </tr>
@@ -81,14 +82,16 @@ LakeForest | Event Panel List
                 <tr>
                     <td class="text-dark fw-bold">{{ page_obj.start_index|add:forloop.counter0 }}</td>
                     <td>
-                        <span class="badge bg-secondary">
+                        <span class="badge bg-info fs--1">
                             {{ panel.name }}
-                        </span><br>
-                        <span class="badge rounded-pill badge-soft-light">
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge badge-soft-warning fs--1">
                             {{ panel.title|slice:":40" }}
                         </span>
                     </td>
-                    <td>{{ panel.event.title|slice:":40" }}...</td>
+                    <!-- <td>{{ panel.event.title|slice:":40" }}...</td> -->
                     <td>
                         {% for spk in panel.speaker.all %}
                         <p class="mt-0 mb-0"><span class="badge bg-light text-dark fs--1">

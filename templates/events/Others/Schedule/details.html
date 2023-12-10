@@ -23,51 +23,12 @@ Event Schedule Details
             </div>
             <div class="card-body bg-light">
                 {% csrf_token %}
+
                 <div class="show_item">
                     <div class="form-group row mb-3">
                         <label class="col-md-3 col-form-label" for="rule">Event</label>
                         <div class="col-md-8">
                             <input class="form-control" type="text" value="{{ event }}"
-                                aria-label="Disabled input example" disabled readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="show_item">
-                    <div class="form-group row mb-3">
-                        <label class="col-md-3 col-form-label" for="rule">Starting Time</label>
-                        <div class="col-md-8">
-                            <input class="form-control" type="text" value="{{ schedule.date }}"
-                                aria-label="Disabled input example" disabled readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="show_item">
-                    <div class="form-group row mb-3">
-                        <label class="col-md-3 col-form-label" for="rule">Starting Time</label>
-                        <div class="col-md-8">
-                            <input class="form-control" type="text" value="{{ schedule.start_time }}"
-                                aria-label="Disabled input example" disabled readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="show_item">
-                    <div class="form-group row mb-3">
-                        <label class="col-md-3 col-form-label" for="rule">Ending Time</label>
-                        <div class="col-md-8">
-                            <input class="form-control" type="text" value="{{ schedule.end_time }}"
-                                aria-label="Disabled input example" disabled readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="show_item">
-                    <div class="form-group row mb-3">
-                        <label class="col-md-3 col-form-label" for="rule">Location</label>
-                        <div class="col-md-8">
-                            <input class="form-control" type="text" value="{{ schedule.location }}"
                                 aria-label="Disabled input example" disabled readonly>
                         </div>
                     </div>
@@ -85,15 +46,11 @@ Event Schedule Details
                                             <table class="table table-bordered table-striped"> 
                                                 <thead class="badge-soft-primary">
                                                     <tr>
-                                                        <th>Attribute</th>
-                                                        <th>Value</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
                                                         <td class="fw-semi-bold">Name</td>
                                                         <td>{{schedule.panel.name}}</td>
                                                     </tr>
+                                                </thead>
+                                                <tbody>
                                                     <tr>
                                                         <td class="fw-semi-bold">Speakers</td>
                                                         <td>
@@ -152,6 +109,46 @@ Event Schedule Details
                         </div>
                     </div>
                 {% endif %}
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Schedule Date</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" value="{{ schedule.date|date:"d/ M/ Y" }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Starting Time</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" value="{{ schedule.start_time|time:"h:i A" }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Ending Time</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" value="{{ schedule.end_time|time:"h:i A" }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="show_item">
+                    <div class="form-group row mb-3">
+                        <label class="col-md-3 col-form-label" for="rule">Location</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" value="{{ schedule.location }}"
+                                aria-label="Disabled input example" disabled readonly>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </form>

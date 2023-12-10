@@ -19,9 +19,9 @@ class UserAdmin(BaseUserAdmin):
         (None, {"fields": ["email", "password", "created_at", "updated_at"]}),
         (
             "Personal info",
-            {"fields": ["name", "phone", "profile_img", "dob", "gender"]},
+            {"fields": ["name", "phone", "profile_img", "dob", "gender", "address"]},
         ),
-        # ("Personal Address", {"fields": ['division', 'sub_division', 'zip_code', 'home']}),
+        ("Others Information", {"fields": ['short_description', 'description', 'courses_taught', 'research_papers', 'interest']}),
         (
             "Permissions",
             {
